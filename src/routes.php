@@ -1,5 +1,9 @@
 <?php
-use App\Models\Course;
+use Psr\Http\Message\{
+    ServerRequestInterface as Request,
+    ResponseInterface as Response
+};
+use App\Models\Post;
 
 $app->get('/detail', function ($request, $response, $args) {
     // Sample log message [{id}]
@@ -12,10 +16,20 @@ $app->get('/detail', function ($request, $response, $args) {
 $app->get('/new', function ($request, $response, $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
-    $course = new Course($this->db);
-    echo var_dump($course);
-    die;
 
+    // Render index view
+    return $this->renderer->render($response, 'new.html', $args);
+});
+
+$app->post('/new', function ($request, $response, $args) {
+    // Sample log message
+    $this->logger->info("Slim-Skeleton '/' route");
+    $post = new Post($this->db);
+    // print_r($post);
+    // die;
+    $data = $request->getParsedBody();
+    $data['date'] = date("Y-m-d");
+    $post->createPost($data);
     // Render index view
     return $this->renderer->render($response, 'new.html', $args);
 });

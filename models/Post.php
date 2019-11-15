@@ -2,82 +2,83 @@
 namespace App\Models;
 use App\Exception\ApiException;
 
-class Course
+class Post
 {
     protected $database;
     public function __construct(\PDO $database)
     {
         $this->database = $database;
     }
-    public function getCourses()
+    public function getPosts()
     {
         $statement = $this->database->prepare(
-            'SELECT * FROM courses ORDER BY id'
+            'SELECT * FROM posts ORDER BY id'
         );
         $statement->execute();
-        $courses = $statement->fetchAll();
-        if (empty($courses)) {
+        $posts = $statement->fetchAll();
+        if (empty($posts)) {
             throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
         }
-        return $courses;
+        return $posts;
     }
-    public function getCourse($course_id)
+    public function getPost($post_id)
     {
         $statement = $this->database->prepare(
-            'SELECT * FROM courses WHERE id=:id'
+            'SELECT * FROM posts WHERE id=:id'
         );
-        $statement->bindParam('id', $course_id);
+        $statement->bindParam('id', $post_id);
         $statement->execute();
-        $course = $statement->fetch();
-        if (empty($courses)) {
+        $post = $statement->fetch();
+        if (empty($post)) {
             throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
         }
-        return $course;
+        return $post;
     }
-    public function createCourse($data)
+    public function createPost($data)
     {
-        if (empty($data['title']) || empty($data['url'])) {
+        if (empty($data['title']) || empty($data['entry']) || empty($data['date'])) {
             throw new ApiException(ApiException::COURSE_INFO_REQUIRED);
         }
         $statement = $this->database->prepare(
-            'INSERT INTO courses(title, url) VALUES(:title, :url)'
+            'INSERT INTO posts (title, body, date) VALUES (:title, :body, :date)'
         );
         $statement->bindParam('title', $data['title']);
-        $statement->bindParam('url', $data['url']);
+        $statement->bindParam('body', $data['entry']);
+        $statement->bindParam('date', $data['date']);
         $statement->execute();
         if ($statement->rowCount()<1) {
             throw new ApiException(ApiException::COURSE_CREATION_FAILED);
         }
-        return $this->getCourse($this->database->lastInsertId());
+        return $this->getPost($this->database->lastInsertId());
     }
-    public function updateCourse($data)
+    public function updatePost($data)
     {
         if (empty($data['course_id']) || empty($data['title']) || empty($data['url'])) {
             throw new ApiException(ApiException::COURSE_INFO_REQUIRED);
         }
         $statement = $this->database->prepare(
-            'UPDATE courses SET title=:title, url=:url WHERE id=:id'
+            'UPDATE posts SET title=:title, url=:url WHERE id=:id'
         );
         $statement->bindParam('title', $data['title']);
         $statement->bindParam('url', $data['url']);
-        $statement->bindParam('id', $data['course_id']);
+        $statement->bindParam('id', $data['post_id']);
         $statement->execute();
         if ($statement->rowCount()<1) {
             throw new ApiException(ApiException::COURSE_UPDATE_FAILED);
         }
-        return $this->getCourse($data['course_id']);
+        return $this->getPost($data['post_id']);
     }
-    public function deleteCourse($course_id)
+    public function deletePost($post_id)
     {
-        $this->getCourse($course_id);
+        $this->getPost($post_id);
         $statement = $this->database->prepare(
-            'DELETE FROM courses WHERE id=:id'
+            'DELETE FROM posts WHERE id=:id'
         );
-        $statement->bindParam('id', $course_id);
+        $statement->bindParam('id', $post_id);
         $statement->execute();
         if ($statement->rowCount()<1) {
             throw new ApiException(ApiException::COURSE_DELETE_FAILED);
         }
-        return ['message' => 'The course was deleted'];
+        return ['message' => 'The post was deleted'];
     }
 }

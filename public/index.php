@@ -23,7 +23,7 @@ require __DIR__ . '/../src/dependencies.php';
 require __DIR__ . '/../src/middleware.php';
 
 // Register middleware
-require __DIR__ . '/../models/Course.php';
+require __DIR__ . '/../models/Post.php';
 
 // Register routes
 require __DIR__ . '/../src/routes.php';

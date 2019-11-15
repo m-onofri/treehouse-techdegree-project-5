@@ -20,7 +20,7 @@ $container['logger'] = function ($c) {
 
 $container['db'] = function ($c) {
     $db = $c->get('settings')['db'];
-    $pdo = new PDO("sqlite:".$db);
+    $pdo = new PDO("sqlite:".$db['path']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $pdo;
 };
