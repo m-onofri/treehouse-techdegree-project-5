@@ -17,3 +17,10 @@ $container['logger'] = function ($c) {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], Monolog\Logger::DEBUG));
     return $logger;
 };
+
+$container['db'] = function ($c) {
+    $db = $c->get('settings')['db'];
+    $pdo = new PDO("sqlite:".$db);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $pdo;
+};
