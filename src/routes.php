@@ -45,7 +45,11 @@ $app->get('/edit', function ($request, $response, $args) {
 $app->get('/', function ($request, $response, $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
+    $post = new Post($this->db);
+    $posts = $post->getPosts();
 
     // Render index view
-    return $this->renderer->render($response, 'index.html', $args);
+    return $this->renderer->render($response, 'index.phtml', [
+        'posts' => $posts
+    ]);
 });
