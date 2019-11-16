@@ -28,8 +28,6 @@ $app->post('/new', function ($request, $response, $args) {
     // Sample log message
     $this->logger->info("Create new Post");
     $post = new Post($this->db);
-    // print_r($post);
-    // die;
     $data = $request->getParsedBody();
     $data['date'] = date("Y-m-d");
     $post->createPost($data);
@@ -37,10 +35,26 @@ $app->post('/new', function ($request, $response, $args) {
     return $this->renderer->render($response, 'new.html', $args);
 });
 
-$app->get('/edit', function ($request, $response, $args) {
-
+$app->get('/edit/{id}', function ($request, $response, $args) {
+    $db = new Post($this->db);
+    $post = $db->getPost($args['id']);
     // Render index view
-    return $this->renderer->render($response, 'edit.html', $args);
+    return $this->renderer->render($response, 'edit.phtml', [
+        'post' => $post
+    ]);
+});
+
+$app->post('/edit', function ($request, $response, $args) {
+    // Sample log message
+    $this->logger->info("Update Post");
+    $post = new Post($this->db);
+    $data = $request->getParsedBody();
+    //$data['date'] = date("Y-m-d");
+    $updatedPost = $post->updatePost($data);
+    // Render index view
+    return $this->renderer->render($response, 'detail.phtml', [
+        'post' => $updatedPost
+    ]);
 });
 
 $app->get('/', function ($request, $response, $args) {

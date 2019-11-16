@@ -53,20 +53,20 @@ class Post
     }
     public function updatePost($data)
     {
-        if (empty($data['course_id']) || empty($data['title']) || empty($data['url'])) {
+        if (empty($data['id']) || empty($data['title']) || empty($data['entry'])) {
             throw new ApiException(ApiException::COURSE_INFO_REQUIRED);
         }
         $statement = $this->database->prepare(
-            'UPDATE posts SET title=:title, url=:url WHERE id=:id'
+            'UPDATE posts SET title=:title, body=:body WHERE id=:id'
         );
         $statement->bindParam('title', $data['title']);
-        $statement->bindParam('url', $data['url']);
-        $statement->bindParam('id', $data['post_id']);
+        $statement->bindParam('body', $data['entry']);
+        $statement->bindParam('id', $data['id']);
         $statement->execute();
         if ($statement->rowCount()<1) {
             throw new ApiException(ApiException::COURSE_UPDATE_FAILED);
         }
-        return $this->getPost($data['post_id']);
+        return $this->getPost($data['id']);
     }
     public function deletePost($post_id)
     {
