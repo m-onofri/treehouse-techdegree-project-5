@@ -5,25 +5,28 @@ use Psr\Http\Message\{
 };
 use App\Models\Post;
 
-$app->get('/detail', function ($request, $response, $args) {
+$app->get('/detail/{id}', function ($request, $response, $args) {
     // Sample log message [{id}]
-    $this->logger->info("Slim-Skeleton '/' route");
+    $db = new Post($this->db);
+    $post = $db->getPost($args['id']);
+    // print_r($post);
+    // die;
 
     // Render index view
-    return $this->renderer->render($response, 'detail.html', $args);
+    return $this->renderer->render($response, 'detail.phtml', [
+        'post' => $post
+    ]);
 });
 
 $app->get('/new', function ($request, $response, $args) {
-    // Sample log message
-    $this->logger->info("Slim-Skeleton '/' route");
-
+    
     // Render index view
     return $this->renderer->render($response, 'new.html', $args);
 });
 
 $app->post('/new', function ($request, $response, $args) {
     // Sample log message
-    $this->logger->info("Slim-Skeleton '/' route");
+    $this->logger->info("Create new Post");
     $post = new Post($this->db);
     // print_r($post);
     // die;
@@ -35,16 +38,12 @@ $app->post('/new', function ($request, $response, $args) {
 });
 
 $app->get('/edit', function ($request, $response, $args) {
-    // Sample log message
-    $this->logger->info("Slim-Skeleton '/' route");
 
     // Render index view
     return $this->renderer->render($response, 'edit.html', $args);
 });
 
 $app->get('/', function ($request, $response, $args) {
-    // Sample log message
-    $this->logger->info("Slim-Skeleton '/' route");
     $post = new Post($this->db);
     $posts = $post->getPosts();
 
