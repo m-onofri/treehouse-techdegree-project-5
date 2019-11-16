@@ -18,11 +18,20 @@
         <section class="entry-comments">
             <div class="container">
                     <h2>Comments</h2>
-                    <div class="comment">
-                        <strong>Carling Kirk</strong>
-                        <time datetime="2016-01-31 1:00">January 31, 2016 at 1:00</time>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque. Vestibulum ut metus eleifend, malesuada nisl at, scelerisque sapien. Vivamus pharetra massa libero, sed feugiat turpis efficitur at.</p>
-                    </div>
+                    <?php if (!empty($comments)) { 
+                        foreach ($comments as $comment) { ?>
+                            <div class="comment">
+                                <strong><?php echo $comment['name']; ?></strong>
+                                <time datetime="<?php echo $comment['date']; ?>">
+                                    <?php echo strftime("%B %e, %G", strtotime($comment['date'])); ?> at 1:00
+                                </time>
+                                <p><?php echo $comment['body']; ?></p>
+                            </div>
+                        <?php } 
+                    } else { ?>
+                        <p>No comments yet. Post the first comment!</p>
+                    <?php } ?>
+                    
                     <div class="new-comment">
                         <form method="POST" action="/comment/new">
                               <label for="name"> Name</label>

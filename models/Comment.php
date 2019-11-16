@@ -18,9 +18,9 @@ class Comment
         $statement->bindParam('post_id', $post_id);
         $statement->execute();
         $comments = $statement->fetchAll();
-        if (empty($comments)) {
-            throw new ApiException(ApiException::REVIEW_NOT_FOUND, 404);
-        }
+        // if (empty($comments)) {
+        //     throw new ApiException(ApiException::REVIEW_NOT_FOUND, 404);
+        // }
         return $comments;
     }
     public function getComment($comment_id)

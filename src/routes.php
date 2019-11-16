@@ -11,13 +11,14 @@ use App\Models\{
 $app->get('/detail/{id}', function ($request, $response, $args) {
     // Sample log message [{id}]
     $db = new Post($this->db);
+    $comment = new Comment($this->db);
     $post = $db->getPost($args['id']);
-    // print_r($post);
-    // die;
+    $comments = $comment->getCommentsByPostId($args['id']);
 
     // Render index view
     return $this->renderer->render($response, 'detail.phtml', [
-        'post' => $post
+        'post' => $post,
+        'comments' => $comments
     ]);
 });
 
