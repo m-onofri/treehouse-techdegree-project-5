@@ -1,3 +1,6 @@
 
 [2019-11-16 00:33:01] slim-app.INFO: Update Post [] {"uid":"2c65ef2"}
 [2019-11-16 00:40:30] slim-app.INFO: Update Post [] {"uid":"bffa42a"}
+[2019-11-16 08:10:48] slim-app.INFO: Delete Post [] {"uid":"614d6a8"}
+[2019-11-16 08:12:37] slim-app.INFO: Delete Post [] {"uid":"ebf106f"}
+[2019-11-16 08:18:15] slim-app.INFO: Delete Post [] {"uid":"fee7a3e"}

@@ -57,6 +57,21 @@ $app->post('/edit', function ($request, $response, $args) {
     ]);
 });
 
+$app->post('/delete', function ($request, $response, $args) {
+    // Sample log message
+    $this->logger->info("Delete Post");
+    $post = new Post($this->db);
+    $id = $request->getParsedBody()['id'];
+    $message = $post->deletePost($id);
+    $posts = $post->getPosts();
+
+    // Render index view
+    return $this->renderer->render($response, 'index.phtml', [
+        'posts' => $posts,
+        'msg' => $message
+    ]);
+});
+
 $app->get('/', function ($request, $response, $args) {
     $post = new Post($this->db);
     $posts = $post->getPosts();
@@ -65,4 +80,4 @@ $app->get('/', function ($request, $response, $args) {
     return $this->renderer->render($response, 'index.phtml', [
         'posts' => $posts
     ]);
-});
+})->setName("root");
