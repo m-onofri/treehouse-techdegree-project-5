@@ -33,10 +33,10 @@ $app->post('/new', function ($request, $response, $args) {
     $this->logger->info("Create new Post");
     $post = new Post($this->db);
     $data = $request->getParsedBody();
-    $data['date'] = date("Y-m-d");
-    $post->createPost($data);
+    $data['date'] = date("Y-m-d H:i");
+    $newPost = $post->createPost($data);
     // Render index view
-    return $this->renderer->render($response, 'new.html', $args);
+    return $response->withRedirect('/detail/'.$newPost['id'], 301);
 });
 
 $app->get('/edit/{id}', function ($request, $response, $args) {

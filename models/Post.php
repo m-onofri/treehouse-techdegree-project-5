@@ -12,7 +12,7 @@ class Post
     public function getPosts()
     {
         $statement = $this->database->prepare(
-            'SELECT * FROM posts ORDER BY id'
+            'SELECT * FROM posts ORDER BY date DESC'
         );
         $statement->execute();
         $posts = $statement->fetchAll();

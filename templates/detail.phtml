@@ -5,7 +5,7 @@
                     <article>
                         <h1><?php echo $post['title']; ?></h1>
                         <time datetime="<?php echo $post['date']; ?>">
-                            <?php echo strftime("%B %e, %G", strtotime($post['date'])); ?> at 1:00
+                            <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
                         </time>
                         <div class="entry">
                             <p><?php echo $post['body']; ?></p>
@@ -23,7 +23,7 @@
                             <div class="comment">
                                 <strong><?php echo $comment['name']; ?></strong>
                                 <time datetime="<?php echo $comment['date']; ?>">
-                                    <?php echo strftime("%B %e, %G", strtotime($comment['date'])); ?> at 1:00
+                                    <?php echo strftime("%B %e, %G at %H:%M", strtotime($comment['date'])); ?>
                                 </time>
                                 <p><?php echo $comment['body']; ?></p>
                             </div>

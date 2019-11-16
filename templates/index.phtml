@@ -8,7 +8,7 @@
                                 <a href="/detail/<?php echo $post['id']; ?>"><?php echo $post['title']; ?></a>
                             </h2>
                             <time datetime="<?php echo $post['date']; ?>">
-                                <?php echo strftime("%B %e, %G", strtotime($post['date'])); ?> at 1:00
+                                <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
                             </time>
                         </article>
                     <?php } ?>
