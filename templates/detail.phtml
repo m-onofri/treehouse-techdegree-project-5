@@ -24,11 +24,12 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut rhoncus felis, vel tincidunt neque. Vestibulum ut metus eleifend, malesuada nisl at, scelerisque sapien. Vivamus pharetra massa libero, sed feugiat turpis efficitur at.</p>
                     </div>
                     <div class="new-comment">
-                        <form>
+                        <form method="POST" action="/comment/new">
                               <label for="name"> Name</label>
                               <input type="text" name="name"><br>
                               <label for="comment">Comment</label>
-                              <textarea rows="5" name="comment"></textarea>
+                              <textarea rows="5" name="body"></textarea>
+                              <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                               <input type="submit" value="Post Comment" class="button">
                         </form>
                     </div>

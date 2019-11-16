@@ -3,7 +3,10 @@ use Psr\Http\Message\{
     ServerRequestInterface as Request,
     ResponseInterface as Response
 };
-use App\Models\Post;
+use App\Models\{
+    Post as Post,
+    Comment as Comment
+};
 
 $app->get('/detail/{id}', function ($request, $response, $args) {
     // Sample log message [{id}]
@@ -81,3 +84,15 @@ $app->get('/', function ($request, $response, $args) {
         'posts' => $posts
     ]);
 })->setName("root");
+
+
+$app->post('/comment/new', function ($request, $response, $args) {
+    // Sample log message
+    $this->logger->info("Create new Comment");
+    $comment = new Comment($this->db);
+    $data = $request->getParsedBody();
+    $data['date'] = date("Y-m-d H:i");
+    $comment->createComment($data);
+    // Render index view
+    return $response->withRedirect('/detail/'.$data['post_id'], 301);
+});
