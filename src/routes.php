@@ -25,7 +25,7 @@ $app->get('/detail/{id}', function ($request, $response, $args) {
 $app->get('/new', function ($request, $response, $args) {
     
     // Render index view
-    return $this->renderer->render($response, 'new.html', $args);
+    return $this->renderer->render($response, 'new.phtml', $args);
 });
 
 $app->post('/new', function ($request, $response, $args) {
@@ -53,7 +53,7 @@ $app->post('/edit', function ($request, $response, $args) {
     $this->logger->info("Update Post");
     $post = new Post($this->db);
     $data = $request->getParsedBody();
-    //$data['date'] = date("Y-m-d");
+    $data['update_date'] = date("Y-m-d H:i");
     $updatedPost = $post->updatePost($data);
     // Render index view
     return $this->renderer->render($response, 'detail.phtml', [

@@ -1,54 +1,52 @@
 <?php include('inc/header.php'); ?>
-        <section>
-            <div class="container">
-                <div class="entry-list single">
-                    <article>
-                        <h1><?php echo $post['title']; ?></h1>
-                        <time datetime="<?php echo $post['date']; ?>">
-                            <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
-                        </time>
-                        <div class="entry">
-                            <p><?php echo $post['body']; ?></p>
-                            <p><a class="link" href="/edit/<?php echo $post['id']; ?>">Edit Entry</a></p>
-                        </div>
-                    </article>
+<section>
+    <div class="container">
+        <div class="entry-list single">
+            <article>
+                <h1><?php echo $post['title']; ?></h1>
+                <time datetime="<?php echo $post['date']; ?>">
+                    Posted on <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
+                </time>
+                <?php if (!empty($post['update_date'])) { ?>
+                    <h4>
+                        Last update: <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['update_date'])); ?>
+                    </h4>
+                <?php } ?>
+                <div class="entry">
+                    <p><?php echo $post['body']; ?></p>
+                    <p><a class="link" href="/edit/<?php echo $post['id']; ?>">Edit Entry</a></p>
                 </div>
-            </div>
-        </section>
-        <section class="entry-comments">
-            <div class="container">
-                    <h2>Comments</h2>
-                    <?php if (!empty($comments)) { 
-                        foreach ($comments as $comment) { ?>
-                            <div class="comment">
-                                <strong><?php echo $comment['name']; ?></strong>
-                                <time datetime="<?php echo $comment['date']; ?>">
-                                    <?php echo strftime("%B %e, %G at %H:%M", strtotime($comment['date'])); ?>
-                                </time>
-                                <p><?php echo $comment['body']; ?></p>
-                            </div>
-                        <?php } 
-                    } else { ?>
-                        <p>No comments yet. Post the first comment!</p>
-                    <?php } ?>
-                    
-                    <div class="new-comment">
-                        <form method="POST" action="/comment/new">
-                              <label for="name"> Name</label>
-                              <input type="text" name="name"><br>
-                              <label for="comment">Comment</label>
-                              <textarea rows="5" name="body"></textarea>
-                              <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
-                              <input type="submit" value="Post Comment" class="button">
-                        </form>
-                    </div>
-            </div>
-        </section>
-        <footer>
-            <div>
-                <a href="#">Contact Us</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;
-                <a href="#">Terms</a>
-            </div>
-        </footer>
-    </body>
-</html>
+            </article>
+        </div>
+    </div>
+</section>
+<section class="entry-comments">
+    <div class="container">
+        <h2>Comments</h2>
+        <?php if (!empty($comments)) { 
+            foreach ($comments as $comment) { ?>
+                <div class="comment">
+                    <strong><?php echo $comment['name']; ?></strong>
+                    <time datetime="<?php echo $comment['date']; ?>">
+                        <?php echo strftime("%B %e, %G at %H:%M", strtotime($comment['date'])); ?>
+                    </time>
+                    <p><?php echo $comment['body']; ?></p>
+                </div>
+            <?php } 
+        } else { ?>
+            <p>No comments yet. Post the first comment!</p>
+        <?php } ?>
+        
+        <div class="new-comment">
+            <form method="POST" action="/comment/new">
+                <label for="name"> Name</label>
+                <input type="text" name="name"><br>
+                <label for="comment">Comment</label>
+                <textarea rows="5" name="body"></textarea>
+                <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
+                <input type="submit" value="Post Comment" class="button">
+            </form>
+        </div>
+    </div>
+</section>
+<?php include('inc/footer.php'); ?>

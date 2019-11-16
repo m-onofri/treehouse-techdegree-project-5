@@ -56,12 +56,20 @@ class Post
         if (empty($data['id']) || empty($data['title']) || empty($data['entry'])) {
             throw new ApiException(ApiException::COURSE_INFO_REQUIRED);
         }
-        $statement = $this->database->prepare(
-            'UPDATE posts SET title=:title, body=:body WHERE id=:id'
-        );
+
+        $query = 'UPDATE posts SET title=:title, body=:body,';
+        if(!empty($data['update_date'])) {
+            $query .= ' update_date=:update_date';
+        }
+        $query .= ' WHERE id=:id';
+
+        $statement = $this->database->prepare($query);
         $statement->bindParam('title', $data['title']);
         $statement->bindParam('body', $data['entry']);
         $statement->bindParam('id', $data['id']);
+        if(!empty($data['update_date'])) {
+            $statement->bindParam('update_date', $data['update_date']);
+        }
         $statement->execute();
         if ($statement->rowCount()<1) {
             throw new ApiException(ApiException::COURSE_UPDATE_FAILED);

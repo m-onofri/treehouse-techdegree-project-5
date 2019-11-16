@@ -10,3 +10,8 @@
 [2019-11-16 09:49:20] slim-app.INFO: Create new Comment [] {"uid":"4e8d62c"}
 [2019-11-16 09:53:36] slim-app.INFO: Create new Post [] {"uid":"fda01b4"}
 [2019-11-16 09:57:10] slim-app.INFO: Create new Post [] {"uid":"2fe65d7"}
+[2019-11-16 21:44:57] slim-app.INFO: Update Post [] {"uid":"5406396"}
+[2019-11-16 21:46:28] slim-app.INFO: Update Post [] {"uid":"fac4376"}
+[2019-11-16 21:49:48] slim-app.INFO: Update Post [] {"uid":"ce34179"}
+[2019-11-16 21:51:42] slim-app.INFO: Update Post [] {"uid":"370b0c5"}
+[2019-11-16 21:52:33] slim-app.INFO: Update Post [] {"uid":"f7c784a"}
