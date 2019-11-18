@@ -1,19 +1,19 @@
-<?php echo include('inc/header.php'); ?>
+<?php include('inc/header.php'); ?>
 <section>
-    <div class="container">
+    <div class="container-new">
         <div class="new-entry">
-            <h2>Publish New Entry</h2>
+            <h2>Publish New Post</h2>
             <form method="post" action="new">
                 <label for="title"> Title</label>
                 <input type="text" name="title"><br>
                 <label for="entry">Entry</label>
                 <textarea rows="5" name="entry"></textarea>
                 <label for="tags">Tags</label>
-                <textarea rows="2" name="tags"></textarea>
-                <input type="submit" value="Publish Entry" class="button">
+                <textarea class="ta-tag" rows="2" name="tags"></textarea>
+                <input type="submit" value="Publish Post" class="button">
                 <a href="#" class="button button-secondary">Cancel</a>
             </form>
         </div>
     </div>
 </section>
-<?php echo include('inc/footer.php'); ?>
+<?php include('inc/footer.php'); ?>

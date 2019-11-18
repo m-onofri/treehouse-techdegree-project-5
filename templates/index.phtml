@@ -1,6 +1,6 @@
 <?php include('inc/header.php'); ?>
         <section>
-            <div class="container">
+            <div class="container-index">
                 <div class="entry-list">
                     <?php  foreach ($posts as $post) { ?>
                         <article>
@@ -10,6 +10,8 @@
                             <time datetime="<?php echo $post['date']; ?>">
                                 <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
                             </time>
+                            <p class="excerpt"><?php echo substr($post['body'], 0, 200); ?>
+                            <a href="/detail/<?php echo $post['id']; ?>">[Read more...]</a></p>
                             <!-- Display all the tags for te current entry -->
                             <?php 
                             if (!empty($post['tags'])) {
@@ -22,10 +24,6 @@
                             ?>
                         </article>
                     <?php } ?>
-                    <!-- <article>
-                        <h2><a href="detail">Dude, where’s my car?</a></h2>
-                        <time datetime="2016-01-31 1:00">January 31, 2016 at 1:00</a></time>
-                    </article> -->
                 </div>
             </div>
         </section>

@@ -4,53 +4,59 @@
    Global Styles
    ========================================================================== */
 body {
-	background: url(../../concepts/JavaTechdegree_SparkBlog_1.jg) top center no-repeat;
-	font-size: 15px;
-	color: #000;
+	font-size: 16px;
+	color: #404a49;
+	font-weight: 400;
+	background-color: #f0fceb;
+	position: relative;
+  	min-height: 100vh;
 	font-family: 'Noto Serif', Georgia, serif;
-	background: #444;
 }
 .container {
 	margin: 0 auto;
 	padding: 0 25px;
-	background: #FFF;
+	background:  #678f89;
 }
 header .site-header {
 	border-bottom: 1px solid #d1d1d1;
 	margin: 0 auto;
 	height: 95px;
+	display: flex;
+	justify-content: space-between;
 }
 header .logo {
-	border: 5px solid #000;
+	border: 5px solid#fff;
 	text-decoration: none;
-	color: #000;
+	color:#fff;
 	font-size: 21px;
 	font-weight: bold;
 	padding: 5px 10px;
-	margin: 24px 0 0 0;
-	float: left;
+	margin: 24px 0;
 	text-transform: uppercase;
 	font-family: 'Noto Sans', sans-serif;
 }
-header .new-entry {
-	float: right;
-	margin: 25px 0 0 0;
+header .button {
+	margin: 24px 10px 24px;
+}
+header .header-buttons {
+	margin-top: 50px;
 }
 footer {
-	background: #444;
-	height: 30px;
 	text-align: center;
 	padding: 35px 0;
-	color: #999;
+	border-top: 4px solid #678f89;
+	max-height: 100px;
+	position: absolute;
+	background-color: #678f89;
+	bottom: 0;
+	width: 100%;
 }
 footer a {
-	color: #999;
+	color: #fff;
 	text-decoration: none;
 	border-bottom: 2px solid #666;
 	padding-bottom: 1px;
 }
-
-
 
 /* ==========================================================================
    Button Styles
@@ -73,16 +79,32 @@ footer a {
 	border-color: #000;
 	color: #000;
 }
-.button.button-round {
-	border-radius: 100px;
-	padding: 9px;
-	line-height: 1px;
+.button.icon-right {
+	position: relative;
+	padding-right: 30px;
+	top: -10px;
+}
+.button.icon-right i {
+	position: absolute;
+	top: 3px;
+	right: 3px;
 }
 .button:focus {
 	outline: 0;
 }
 .button-tag {
-	margin: 0 0.5rem;
+	margin: 0 1rem 0 0;
+}
+.button.edit-button {
+	display: color;
+	background-color: coral;
+	border-color: coral;
+	color: #fff;
+	margin: 0 0 25px;
+}
+.button-delete {
+	background-color: crimson;
+	border-color:crimson;
 }
 
 
@@ -132,10 +154,10 @@ a.link {
 .entry-list,
 .edit-entry,
 .new-entry,
-.password {
+.single {
 	max-width: 700px;
 	margin: 0 auto;
-	padding: 90px 0 100px 0;
+	padding: 90px 0 170px 0;
 }
 .edit-entry h2,
 .new-entry h2,
@@ -144,7 +166,11 @@ a.link {
 }
 .entry-list article {
 	margin-bottom: 70px;
-	text-align: center;
+	text-align: left;
+	padding: 1rem;
+	border: 4px solid rgba(103, 143, 137, 0.493);
+	border-radius: 10px;
+	background-color: #fff;
 }
 .entry-list article:last-child {
 	margin-bottom: 5px;
@@ -152,16 +178,29 @@ a.link {
 .entry-list article h2 {
 	margin-bottom: 8px;
 }
+.entry-list article h2 a {
+	color: #404a49;
+}
+.entry-list article .excerpt a {
+	color: #404a49;
+	font-weight: bold;
+	text-decoration: none;
+}
 .entry-list article a {
 	text-decoration: none;
 }
 .entry-list time {
 	color: #888;
 }
-.entry-list.single {
+.single {
 	padding-bottom: 30px;
 }
-.entry-list.single time {
+.single .article-header,
+.edit-header {
+	display: flex;
+	justify-content: space-between;
+}
+.single time {
 	font-size: 18px;
 }
 .entry {
@@ -173,6 +212,10 @@ a.link {
 	font-size: 18px;
 	margin-bottom: 40px;
 }
+.tags-list {
+	margin: 2rem 0 1rem;
+}
+
 .entry-comments {
 	background: #f1f1f1;
 	padding: 70px 0;
@@ -195,6 +238,9 @@ a.link {
 	border-bottom: 1px solid #c1c1c1;
 	padding: 35px 0 20px;
 	margin: 2px 0 0 0;
+}
+.comment h4 {
+	text-align: center;
 }
 .comment time {
 	display: block;
@@ -259,11 +305,12 @@ form textarea:hover {
 .new-entry form textarea {
 	min-height: 400px;
 }
+.edit-entry form textarea.ta-tag,
+.new-entry form textarea.ta-tag {
+	min-height: 125px;
+}
 input[type=submit] {
 	margin-right: 5px;
-}
-.tags-list {
-	margin: 1rem;
 }
 
 

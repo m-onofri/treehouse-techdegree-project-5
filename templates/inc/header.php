@@ -14,8 +14,10 @@
             <div class="container">
                 <div class="site-header">
                     <a class="logo" href="/">SparkBlog</a>
-                    <a class="new-entry button button-round" href="/new"><i class="material-icons">create</i></a>
-                    <a class="new-entry button button-round" href="/tags"><i class="material-icons">label</i></a>
+                    <div class="header-buttons">
+                        <a class="button icon-right" href="/tags"><span>Tags</span> <i class="material-icons">add</i></a>
+                        <a class="button icon-right" href="/new"><span>New Post</span> <i class="material-icons">add</i></a>
+                    </div>
                 </div>
             </div>
         </header>

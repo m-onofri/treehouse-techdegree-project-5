@@ -1,9 +1,12 @@
 <?php include('inc/header.php'); ?>
 <section>
-    <div class="container">
-        <div class="entry-list single">
+    <div class="container-detail">
+        <div class="single">
             <article>
-                <h1><?php echo $post['title']; ?></h1>
+                <div class="article-header">
+                    <h1><?php echo $post['title']; ?></h1>
+                    <a class="button edit-button" href="/edit/<?php echo $post['id']; ?>">Edit Post</a>
+                </div>
                 <time datetime="<?php echo $post['date']; ?>">
                     Posted on <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
                 </time>
@@ -23,7 +26,6 @@
                     ?>
                 <div class="entry">
                     <p><?php echo $post['body']; ?></p>
-                    <p><a class="link" href="/edit/<?php echo $post['id']; ?>">Edit Entry</a></p>
                 </div>
             </article>
         </div>
@@ -49,7 +51,9 @@
                 </div>
             <?php } 
         } else { ?>
-            <p>No comments yet. Post the first comment!</p>
+            <div class="comment">
+                <h4>No comments yet. Post the first comment!</h4>
+            </div>
         <?php } ?>
         
         <div class="new-comment">
