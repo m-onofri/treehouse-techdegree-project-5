@@ -10,6 +10,16 @@
                             <time datetime="<?php echo $post['date']; ?>">
                                 <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['date'])); ?>
                             </time>
+                            <!-- Display all the tags for te current entry -->
+                            <?php 
+                            if (!empty($post['tags'])) {
+                                echo "<div class='tags-list'>";
+                                foreach ($post['tags'] as $tag) {
+                                    echo "<a href='tags.php?id=" . $tag['id'] . "' class='button button-tag'>" . $tag['name'] . "</a>";
+                                }
+                                echo "</div>";
+                            } 
+                            ?>
                         </article>
                     <?php } ?>
                     <!-- <article>

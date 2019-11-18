@@ -15,3 +15,22 @@
 [2019-11-16 21:49:48] slim-app.INFO: Update Post [] {"uid":"ce34179"}
 [2019-11-16 21:51:42] slim-app.INFO: Update Post [] {"uid":"370b0c5"}
 [2019-11-16 21:52:33] slim-app.INFO: Update Post [] {"uid":"f7c784a"}
+[2019-11-16 23:40:44] slim-app.INFO: Create new Post [] {"uid":"64ff2a5"}
+[2019-11-16 23:41:46] slim-app.INFO: Create new Post [] {"uid":"98f04f3"}
+[2019-11-16 23:42:27] slim-app.INFO: Create new Post [] {"uid":"b463939"}
+[2019-11-16 23:43:46] slim-app.INFO: Create new Post [] {"uid":"f890276"}
+[2019-11-16 23:44:26] slim-app.INFO: Create new Post [] {"uid":"a329cd0"}
+[2019-11-16 23:44:55] slim-app.INFO: Create new Post [] {"uid":"7e642cb"}
+[2019-11-16 23:47:57] slim-app.INFO: Create new Post [] {"uid":"538b35e"}
+[2019-11-16 23:51:27] slim-app.INFO: Create new Post [] {"uid":"3dd93b6"}
+[2019-11-17 08:54:09] slim-app.INFO: Update Post [] {"uid":"1c57bfd"}
+[2019-11-17 08:58:22] slim-app.INFO: Update Post [] {"uid":"06c5edf"}
+[2019-11-17 09:01:40] slim-app.INFO: Update Post [] {"uid":"55fb480"}
+[2019-11-17 13:59:42] slim-app.INFO: Create new Comment [] {"uid":"a98c087"}
+[2019-11-17 14:00:03] slim-app.INFO: Create new Comment [] {"uid":"fefc801"}
+[2019-11-18 09:12:03] slim-app.INFO: Delete Post [] {"uid":"14dee40"}
+[2019-11-18 09:14:45] slim-app.INFO: Update Post [] {"uid":"8e3f4d7"}
+[2019-11-18 09:15:33] slim-app.INFO: Delete Post [] {"uid":"a10ef00"}
+[2019-11-18 09:18:33] slim-app.INFO: Delete Post [] {"uid":"6b0f8f1"}
+[2019-11-18 09:21:34] slim-app.INFO: Delete Post [] {"uid":"0093ade"}
+[2019-11-18 09:22:59] slim-app.INFO: Delete Post [] {"uid":"e6431cb"}

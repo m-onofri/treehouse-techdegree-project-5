@@ -53,19 +53,6 @@ class Comment
         }
         return $this->getComment($this->database->lastInsertId());
     }
-    public function updateComment($data)
-    {
-        $this->getComment($data['comment_id']);
-        $statement = $this->database->prepare('UPDATE comments SET rating=:rating, comment=:comment WHERE id=:id');
-        $statement->bindParam('id', $data['comment_id']);
-        $statement->bindParam('rating', $data['rating']);
-        $statement->bindParam('comment', $data['comment']);
-        $statement->execute();
-        if ($statement->rowCount()<1) {
-            throw new ApiException(ApiException::REVIEW_UPDATE_FAILED);
-        }
-        return $this->getComment($data['comment_id']);
-    }
     public function deleteComment($comment_id)
     {
         $this->getComment($comment_id);

@@ -81,7 +81,9 @@ footer a {
 .button:focus {
 	outline: 0;
 }
-
+.button-tag {
+	margin: 0 0.5rem;
+}
 
 
 /* ==========================================================================
@@ -152,7 +154,6 @@ a.link {
 }
 .entry-list article a {
 	text-decoration: none;
-	color: #000;
 }
 .entry-list time {
 	color: #888;
@@ -260,6 +261,9 @@ form textarea:hover {
 }
 input[type=submit] {
 	margin-right: 5px;
+}
+.tags-list {
+	margin: 1rem;
 }
 
 

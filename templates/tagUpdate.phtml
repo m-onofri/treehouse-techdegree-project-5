@@ -1,0 +1,14 @@
+<?php include('inc/header.php'); ?>
+
+
+    <div class="edit-tag">
+        <form action="tag/update" method="post">
+            <label for="current-name">Current tag name</label>
+            <input type="text" id="current-name" name="current-name" value="<?php echo $tagName; ?>" />
+            <label for="current-name">New tag name</label>
+            <input type="text" id="new-name" name="new-name">
+            <input type="submit" class="button" value="update" name="change-tag-name">
+        </form>
+    </div>
+    
+<?php include('inc/footer.php'); ?>

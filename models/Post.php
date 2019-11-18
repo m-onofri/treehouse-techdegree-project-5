@@ -78,15 +78,20 @@ class Post
     }
     public function deletePost($post_id)
     {
-        $this->getPost($post_id);
-        $statement = $this->database->prepare(
-            'DELETE FROM posts WHERE id=:id'
-        );
-        $statement->bindParam('id', $post_id);
-        $statement->execute();
-        if ($statement->rowCount()<1) {
-            throw new ApiException(ApiException::COURSE_DELETE_FAILED);
+        try {
+            $result = $this->database->prepare('DELETE FROM posts WHERE id = :post_id');
+            $result->bindParam('post_id', $post_id);
+    
+            $result1 = $this->database->prepare('DELETE FROM posts_tags WHERE posts_id = :post_id');
+            $result1->bindParam('post_id', $post_id);
+    
+           if ($result->execute() && $result1->execute()) {
+                return true;
+            }
+        } catch (Exception $e) {
+           $e->getMessage();
         }
-        return ['message' => 'The post was deleted'];
+    
+        return false;
     }
 }

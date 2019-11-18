@@ -15,6 +15,7 @@
                 <div class="site-header">
                     <a class="logo" href="/">SparkBlog</a>
                     <a class="new-entry button button-round" href="/new"><i class="material-icons">create</i></a>
+                    <a class="new-entry button button-round" href="/tags"><i class="material-icons">label</i></a>
                 </div>
             </div>
         </header>

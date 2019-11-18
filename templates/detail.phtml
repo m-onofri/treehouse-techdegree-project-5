@@ -12,6 +12,15 @@
                         Last update: <?php echo strftime("%B %e, %G at %H:%M", strtotime($post['update_date'])); ?>
                     </h4>
                 <?php } ?>
+                <?php 
+                    if (!empty($tags)) {
+                        echo "<div class='tags-list'>";
+                        foreach ($tags as $tag) {
+                            echo "<a href='tags.php?id=" . $tag['id'] . "' class='button button-tag'>" . $tag['name'] . "</a>";
+                        }
+                        echo "</div>";
+                    } 
+                    ?>
                 <div class="entry">
                     <p><?php echo $post['body']; ?></p>
                     <p><a class="link" href="/edit/<?php echo $post['id']; ?>">Edit Entry</a></p>
@@ -30,6 +39,12 @@
                     <time datetime="<?php echo $comment['date']; ?>">
                         <?php echo strftime("%B %e, %G at %H:%M", strtotime($comment['date'])); ?>
                     </time>
+                    <form action="/comment/delete" method="POST"
+                        onsubmit="return confirm('Are you sure you want to delete this comment?')">
+                        <input type='hidden' value='<?php echo $comment['id']; ?>' name='comment_id' />
+                        <input type='hidden' value='<?php echo $post['id']; ?>' name='post_id' />
+                        <input type='submit' class='button button-delete' value='delete' />
+                    </form>
                     <p><?php echo $comment['body']; ?></p>
                 </div>
             <?php } 

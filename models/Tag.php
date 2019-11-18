@@ -11,32 +11,39 @@ class Tag
     }
     public function getTagsByPostId($post_id)
     {
-        if (empty($post_id)) {
-            throw new ApiException(ApiException::REVIEW_INFO_REQUIRED);
+        try {
+            $statement = $this->database->prepare('SELECT tags.name, tags.id FROM tags JOIN posts_tags ON tags.id = posts_tags.tags_id WHERE posts_tags.posts_id = :post_id');
+            $statement->bindParam('post_id', $post_id);
+            $statement->execute();
+    
+            $tags = $statement->fetchAll();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        $statement = $this->database->prepare(
-            'SELECT tags.name, tags.id FROM tags JOIN posts_tags
-            ON tags.id = posts_tags.tags_id
-            WHERE posts_tags.posts_id = :post_id'
-        );
-        $statement->bindParam('post_id', $post_id);
-        $statement->execute();
-
-        $tags = $statement->fetchAll();
 
         return $tags;
     }
+    public function getPostsPerTag($tag_id) {
+        try {
+            $results =  $this->database->query('SELECT posts.* FROM posts JOIN posts_tags
+                                    ON posts.id = posts_tags.posts_id
+                                    WHERE posts_tags.tags_id = :tag_id
+                                    ORDER BY posts.date DESC');
+            $results->bindParam('tag_id', $tag_id);
+            $results->execute();
+        } catch (Exception $e) {
+           $e->getMessage();
+        }
+    
+        $entries = $results->fetchAll();
+    
+        return $entries;
+    }
     public function getTags()
     {
-        if (empty($comment_id)) {
-            throw new ApiException(ApiException::REVIEW_INFO_REQUIRED);
-        }
         $statement = $this->database->prepare('SELECT name FROM tags ORDER BY name');
         $statement->execute();
-        $tags = array_map(function($t) { return $t['name'];}, $statement->fetchAll(PDO::FETCH_ASSOC));
-        if (empty($tags)) {
-            throw new ApiException(ApiException::REVIEW_NOT_FOUND, 404);
-        }
+        $tags = array_map(function($t) { return $t['name'];}, $statement->fetchAll());
         return $tags;
     }
     public function getTag($tag_id)
@@ -74,13 +81,13 @@ class Tag
         }
         try {
             if (!empty($id)) {
-                $result = $this->database->prepare('UPDATE tags SET name = ? WHERE id = ?');
+                $result = $this->database->prepare('UPDATE tags SET name = :name WHERE id = :id');
             } else {
-                $result = $this->database->prepare('INSERT INTO tags (name) VALUES (?)');
+                $result = $this->database->prepare('INSERT INTO tags (name) VALUES (:name)');
             }
-            $result->bindValue(1, $tag, PDO::PARAM_STR);
+            $result->bindParam('name', $tag);
             if (!empty($id)) {
-                $result->bindValue(2, $id, PDO::PARAM_INT);
+                $result->bindParam('id', $id);
             }
             if ($result->execute()) {
                 if (!empty($id)) {
@@ -95,7 +102,7 @@ class Tag
         }
         return false;
     }
-    public function add_tags($tags, $post_id)
+    public function addTags($tags, $post_id)
     {
         $tags_arr = array_map(function($t) {return trim($t);}, explode(',', $tags));
         //Get all the tags in the tags table
@@ -117,9 +124,9 @@ class Tag
             if (!in_array($tag, $postTags)) {
                 //if not, add the entry id and the tag id to the enries_tags table
                 try {
-                    $result = $this->database->prepare('INSERT INTO posts_tags (posts_id, tags_id) VALUES (?, ?)');
-                    $result->bindValue(1, $post_id, PDO::PARAM_INT);
-                    $result->bindValue(2, $tag_id, PDO::PARAM_INT);
+                    $result = $this->database->prepare('INSERT INTO posts_tags (posts_id, tags_id) VALUES (:posts_id, :tags_id)');
+                    $result->bindParam("posts_id", $post_id);
+                    $result->bindParam("tags_id", $tag_id);
                     $result->execute();
                 } catch (Exception $e) {
                     $e->getMessage();
@@ -142,9 +149,9 @@ class Tag
     public function deletePostTag($post_id, $tag_id)
     {
         try {
-            $result = $this->database->prepare('DELETE FROM posts_tags WHERE posts_id = ? AND tags_id = ?');
-            $result->bindValue(1, $post_id, PDO::PARAM_INT);
-            $result->bindValue(2, $tag_id, PDO::PARAM_INT);
+            $result = $this->database->prepare('DELETE FROM posts_tags WHERE posts_id = :post_id AND tags_id = :tag_id');
+            $result->bindParam("post_id", $post_id);
+            $result->bindParam("tag_id", $tag_id);
             if ($result->execute()) {
                 return true;
             }
@@ -158,11 +165,11 @@ class Tag
     public function deleteTag($tag_id) {
     
         try {
-            $result = $this->database->prepare('DELETE FROM tags WHERE id = ?');
-            $result->bindValue(1, $tag_id, PDO::PARAM_INT);
+            $result = $this->database->prepare('DELETE FROM tags WHERE id = :tag_id');
+            $result->bindParam("tag_id", $tag_id);
     
-            $result1 = $this->database->prepare('DELETE FROM posts_tags WHERE tags_id = ?');
-            $result1->bindValue(1, $tag_id, PDO::PARAM_INT);
+            $result1 = $this->database->prepare('DELETE FROM posts_tags WHERE tags_id = :tag_id');
+            $result1->bindParam("tag_id", $tag_id);
     
            if ($result->execute() && $result1->execute()) {
                 return true;
