@@ -25,7 +25,7 @@ $app->get('/detail/{id}', function ($request, $response, $args) {
 $app->get('/new', function ($request, $response, $args) {
     
     // Render index view
-    return $this->renderer->render($response, 'new.phtml', $args);
+    return $this->view->render($response, 'new.twig', $args);
 });
 
 $app->post('/new', function ($request, $response, $args) {
