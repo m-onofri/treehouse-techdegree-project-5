@@ -104,7 +104,7 @@ $app->get('/tags', function ($request, $response, $args) {
     $tag = new Tag($this->db);
     $tagsList = $tag->getTags();
     // Render index view
-    return $this->renderer->render($response, 'tags.phtml', [
+    return $this->view->render($response, 'tags.twig', [
         'tagsList' => $tagsList
     ]);
 });
@@ -114,7 +114,6 @@ $app->post('/tag', function ($request, $response, $args) {
     $data = $request->getParsedBody();
     $tagName = $data['tag'];
     $tag_id = $tag->getTagId($tagName)['id'];
-    //print_r($data); die;
     switch ($data['action']) {
         case 'List Entries':
             $tagsList = $tag->getTags();
@@ -124,13 +123,13 @@ $app->post('/tag', function ($request, $response, $args) {
                 $t['tags'] = $tags->getTagsByPostId($t['id']);
                 return $t;
             }, $postsList);
-            return $this->renderer->render($response, 'tags.phtml', [
+            return $this->view->render($response, 'tags.twig', [
                 'tagsList' => $tagsList,
                 'posts' => $p,
                 'tagName' => $tagName
             ]);
         case 'Update':
-            return $this->renderer->render($response, 'tagUpdate.phtml', [
+            return $this->view->render($response, 'tagUpdate.twig', [
                 'tagName' => $tagName
             ]);
         case 'Delete':

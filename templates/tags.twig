@@ -1,19 +1,17 @@
-<?php include('inc/header.php'); ?>
+{{ include('inc/header.php') }}
 
 <div class="tags-control">
     <!-- Display the form to select a tag and the buttons to update or delete the selected tag -->
     <form action="tag" method="post">
         <select name="tag">
         <option>Select a tag</option>
-        <?php 
-        foreach ($tagsList as $tag) {
-            if (isset($tag_id) && ($tag == $tag_name)) {
-                echo "<option value='$tag' selected>$tag</option>";
-            } else {
-                echo "<option value='$tag'>$tag</option>";
-            }
-        } 
-        ?>
+        {% for tag in tagsList %}
+            {% if tag_id is not empty and tag == tag_name %}
+                <option value='{{ tag }}' selected>{{ tag }}</option>
+            {% else %}
+                <option value='{{ tag }}'>{{ tag }}</option>
+            {% endif %}
+        {% endfor %}
         </select>
         <input class="button" type="submit" name="action" value="List Entries" />
         <input class="button button-update" type="submit" name="action" value="Update" />
@@ -24,22 +22,20 @@
     <div class="container-tags">
 
 <!-- Display list of entries with the selected tag  -->
-<?php 
-if (isset($posts)) {
-    $posts_number = count($posts);
-    if ($posts_number > 0) {
-        if ($posts_number == 1) {
-            echo "<h4>$posts_number entry with the tag: $tagName</h4>";
-        } else {
-            echo "<h4>$posts_number entries with the tag: $tagName</h4>";
-        }
-        include('inc/postsList.php');
-    } else {
-        echo "<h4>No entries with the tag: $tagName</h4>";
-    }
-}
-?>
-</div>
-        </section>
+        {% if posts is not empty %}
+            {% set posts_number = posts|length %}
+            {% if posts_number > 0 %}
+                {% if posts_number == 1 %}
+                    <h4>{{ posts_number }} post with the tag: {{ tagName }}</h4>
+                {% else %}
+                    <h4>{{ posts_number }} posts with the tag: {{ tagName }}</h4>
+                {% endif %}
+                {{ include('inc/postsList.twig') }}
+            {% else %}
+                <h4>No entries with the tag: {{ tagName }}</h4>
+            {% endif %}    
+        {% endif %}
+    </div>
+</section>
     
-<?php include('inc/footer.php'); ?>
+{{ include('inc/footer.php') }}
