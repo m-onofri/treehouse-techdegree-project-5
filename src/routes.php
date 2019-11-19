@@ -15,7 +15,7 @@ $app->get('/detail/{id}', function ($request, $response, $args) {
     $tags = $tag->getTagsByPostId($args['id']);
 
     // Render index view
-    return $this->renderer->render($response, 'detail.phtml', [
+    return $this->view->render($response, 'detail.twig', [
         'post' => $post,
         'comments' => $comments,
         'tags' => $tags
