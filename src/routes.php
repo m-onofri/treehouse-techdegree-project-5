@@ -119,9 +119,14 @@ $app->post('/tag', function ($request, $response, $args) {
         case 'List Entries':
             $tagsList = $tag->getTags();
             $postsList = $tag->getPostsPerTag($tag_id);
+            $p= array_map(function($t) {
+                $tags = new Tag($this->db);
+                $t['tags'] = $tags->getTagsByPostId($t['id']);
+                return $t;
+            }, $postsList);
             return $this->renderer->render($response, 'tags.phtml', [
                 'tagsList' => $tagsList,
-                'posts' => $postsList,
+                'posts' => $p,
                 'tagName' => $tagName
             ]);
         case 'Update':

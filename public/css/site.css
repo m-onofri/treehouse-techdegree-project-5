@@ -252,6 +252,18 @@ a.link {
 	max-width: 700px;
 	margin: 0 auto;
 }
+.tags-control {
+	display: block;
+	width: 450px;
+	margin: 50px auto 0;
+}
+.container-tags h4 {
+	text-align: center;
+}
+.container-tags .entry-list {
+	padding-top: 30px;
+}
+
 
 
 

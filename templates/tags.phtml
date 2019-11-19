@@ -20,33 +20,8 @@
         <input class="button button-delete" type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you want to delete the selected tag?')" />
     </form>
 </div>
-
-<!-- Display the message -->
-<?php 
-if (isset($_GET['msg'])) {
-    $msg = filter_input(INPUT_GET, 'msg', FILTER_SANITIZE_STRING);
-    echo "<div class='tags-message'>";
-    echo "<h4>$msg</h4>";
-    echo "</div";
-}
-?>
-
-<div class="tags-message">
-
-</div>
-
-<!-- Display this form when update button was selected -->
-<?php if (isset($_POST['update'])) { ?>
-    <div class="edit-tag">
-        <form action="tags.php" method="post">
-            <label for="current-name">Current tag name</label>
-            <input type="text" id="current-name" name="current-name" value="<?php echo $tag_name; ?>" />
-            <label for="current-name">New tag name</label>
-            <input type="text" id="new-name" name="new-name">
-            <input type="submit" class="button" value="update" name="change-tag-name">
-        </form>
-    </div>
-<?php } ?>
+<section>
+    <div class="container-tags">
 
 <!-- Display list of entries with the selected tag  -->
 <?php 
@@ -58,11 +33,13 @@ if (isset($posts)) {
         } else {
             echo "<h4>$posts_number entries with the tag: $tagName</h4>";
         }
-        //include('inc/entriesList.php');
+        include('inc/postsList.php');
     } else {
         echo "<h4>No entries with the tag: $tagName</h4>";
     }
 }
 ?>
+</div>
+        </section>
     
 <?php include('inc/footer.php'); ?>
