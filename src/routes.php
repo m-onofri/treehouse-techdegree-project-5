@@ -95,7 +95,7 @@ $app->get('/', function ($request, $response, $args) {
     }, $posts);
 
     // Render index view
-    return $this->renderer->render($response, 'index.phtml', [
+    return $this->view->render($response, 'index.twig', [
         'posts' => $p
     ]);
 });
