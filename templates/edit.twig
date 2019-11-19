@@ -1,4 +1,4 @@
-<?php include('inc/header.php'); ?>
+{{ include('inc/header.php') }}
         <section>
             <div class="container-edit">
                 <div class="edit-entry">
@@ -6,22 +6,22 @@
                         <h2>Edit Post</h2>
                         <form action="/delete" method="POST"
                             onsubmit="return confirm('Are you sure you want to delete this post?')">
-                            <input type='hidden' value='<?php echo $post['id']; ?>' name='id' />
+                            <input type='hidden' value='{{ post.id }}' name='id' />
                             <input type='submit' class='button button-delete' value='delete' />
                         </form>
                     </div>
                     <form method="post" action="/edit">
                         <label for="title"> Title</label>
-                        <input type="text" name="title" value="<?php echo $post['title']; ?>"><br>
+                        <input type="text" name="title" value="{{ post.title }}"><br>
                         <label for="entry">Entry</label>
-                        <textarea rows="5" name="entry"><?php echo $post['body']; ?></textarea>
+                        <textarea rows="5" name="entry">{{ post.body }}</textarea>
                         <label for="tags">Tags</label>
-                        <textarea rows="2" class="ta-tag" name="tags"><?php echo implode(", ", $tags); ?></textarea>
-                        <input type="hidden" name="id" value="<?php echo $post['id']; ?>"><br>
+                        <textarea rows="2" class="ta-tag" name="tags">{{ tags|join(", ") }}</textarea>
+                        <input type="hidden" name="id" value="{{ post.id }}"><br>
                         <input type="submit" value="Update Post" class="button">
                         <a href="#" class="button button-secondary">Cancel</a>
                     </form>
                 </div>
             </div>
         </section>
-<?php include('inc/footer.php'); ?>
+{{ include('inc/footer.php') }}

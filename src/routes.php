@@ -49,7 +49,7 @@ $app->get('/edit/{id}', function ($request, $response, $args) {
     $tag = new Tag($this->db);
     $tags = array_map(function($t){return $t['name'];}, $tag->getTagsByPostId($args['id']));
     // Render index view
-    return $this->renderer->render($response, 'edit.phtml', [
+    return $this->view->render($response, 'edit.twig', [
         'post' => $post,
         'tags' => $tags
     ]);
@@ -69,7 +69,7 @@ $app->post('/edit', function ($request, $response, $args) {
     $tags = $tag->getTagsByPostId($data['id']);
 
     // Render index view
-    return $this->renderer->render($response, 'detail.phtml', [
+    return $this->renderer->render($response, 'detail.twig', [
         'post' => $updatedPost,
         'tags' => $tags
     ]);
