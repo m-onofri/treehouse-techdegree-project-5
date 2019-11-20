@@ -1,5 +1,10 @@
 <?php
 // DIC configuration
+use App\Models\{
+    Post as Post,
+    Comment as Comment,
+    Tag as Tag
+};
 
 $container = $app->getContainer();
 
@@ -38,3 +43,19 @@ $container['view'] = function ($container) {
 
     return $view;
 };
+
+$container['post'] = function ($c) {
+    $post = new Post($c->db);
+    return $post;
+};
+
+$container['comment'] = function ($c) {
+    $comment = new Comment($c->db);
+    return $comment;
+};
+
+$container['tag'] = function ($c) {
+    $tag = new Tag($c->db);
+    return $tag;
+};
+

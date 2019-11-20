@@ -33,7 +33,7 @@ class Post
         if (empty($posts)) {
             throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
         }
-        return $posts;
+        return $this->implementTags($posts);
     }
     public function getPostsPerTag($tag_id, $limit = null, $skip = 0) {
         try {
@@ -57,7 +57,7 @@ class Post
     
         $entries = $results->fetchAll();
     
-        return $entries;
+        return $this->implementTags($entries);
     }
     public function getPost($post_id)
     {
@@ -131,5 +131,28 @@ class Post
         }
     
         return false;
+    }
+
+    public function getTagsByPostId($post_id)
+    {
+        try {
+            $statement = $this->database->prepare('SELECT tags.name, tags.id FROM tags JOIN posts_tags ON tags.id = posts_tags.tags_id WHERE posts_tags.posts_id = :post_id');
+            $statement->bindParam('post_id', $post_id);
+            $statement->execute();
+    
+            $tags = $statement->fetchAll();
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+
+        return $tags;
+    }
+
+    protected function implementTags($posts)
+    {
+        return array_map(function($t) {
+                $t['tags'] = $this->getTagsByPostId($t['id']);
+                return $t;
+            }, $posts);
     }
 }
