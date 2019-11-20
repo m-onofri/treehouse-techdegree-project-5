@@ -1,3 +1,4 @@
+{% set uri = '/tag?tag=' ~ tagId ~ '&' %}
 {{ include('inc/header.php') }}
 
 <div class="tags-control">
@@ -23,12 +24,11 @@
 
 <!-- Display list of entries with the selected tag  -->
         {% if posts is not empty %}
-            {% set posts_number = posts|length %}
-            {% if posts_number > 0 %}
-                {% if posts_number == 1 %}
-                    <h4>{{ posts_number }} post with the tag: {{ tagName }}</h4>
+            {% if pagination.count > 0 %}
+                {% if pagination.count == 1 %}
+                    <h3>{{ pagination.count }} post with the tag: {{ tagName }}</h3>
                 {% else %}
-                    <h4>{{ posts_number }} posts with the tag: {{ tagName }}</h4>
+                    <h3>{{ pagination.count }} posts with the tag: {{ tagName }}</h3>
                 {% endif %}
                 {{ include('inc/postsList.twig') }}
             {% else %}

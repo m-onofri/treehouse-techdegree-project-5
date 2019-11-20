@@ -19,5 +19,14 @@
             {% endif %}
         </article>
     {% endfor %}
+    {% if pagination.needed %}
+        <div class="ui pagination menu">
+            {% for i in 1..pagination.lastpage %}
+                <a class="{% if i == pagination.page %}active{% endif %} item" href="{{ uri }}page={{ i }}">
+                    {{ i }}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 

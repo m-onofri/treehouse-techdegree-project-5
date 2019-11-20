@@ -62,17 +62,18 @@ $app->post('/edit', function ($request, $response, $args) {
 
     $post = new Post($this->db);
     $data['update_date'] = date("Y-m-d H:i");
-    $updatedPost = $post->updatePost($data);
+    $post->updatePost($data);
 
     $tag = new Tag($this->db);
     $tag->addTags($data['tags'], $data['id']);
-    $tags = $tag->getTagsByPostId($data['id']);
+    // $tags = $tag->getTagsByPostId($data['id']);
 
     // Render index view
-    return $this->renderer->render($response, 'detail.twig', [
-        'post' => $updatedPost,
-        'tags' => $tags
-    ]);
+    return $response->withRedirect("/detail/".$data['id'], 301);
+    // return $this->view->render($response, 'detail.twig', [
+    //     'post' => $updatedPost,
+    //     'tags' => $tags
+    // ]);
 });
 
 $app->post('/delete', function ($request, $response, $args) {
@@ -86,8 +87,13 @@ $app->post('/delete', function ($request, $response, $args) {
 
 $app->get('/', function ($request, $response, $args) {
     $post = new Post($this->db);
-    $posts = $post->getPosts();
 
+    $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
+    $limit = 5; // Number of posts on one page
+    $skip = ($page - 1) * $limit;
+    $count = $post->countPosts(); // Count of all available posts
+
+    $posts = $post->getPosts($limit, $skip);
     $p= array_map(function($t) {
         $tags = new Tag($this->db);
         $t['tags'] = $tags->getTagsByPostId($t['id']);
@@ -96,7 +102,14 @@ $app->get('/', function ($request, $response, $args) {
 
     // Render index view
     return $this->view->render($response, 'index.twig', [
-        'posts' => $p
+        'posts' => $p,
+        'pagination' => [
+            'needed' => $count > $limit,
+            'count' => $count,
+            'page' => $page,
+            'lastpage' => (ceil($count / $limit) == 0 ? 1 : ceil($count / $limit)),
+            'limit' => $limit
+        ]
     ]);
 });
 
@@ -109,24 +122,75 @@ $app->get('/tags', function ($request, $response, $args) {
     ]);
 });
 
+$app->get('/tag', function ($request, $response, $args) {
+    $tag = new Tag($this->db);
+    $post = new Post($this->db);
+    $tag_id = $request->getParam('tag');
+    $tagName = $tag->getTag($tag_id)['name'];
+    $tagsList = $tag->getTags();
+
+    $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
+    $limit = 5; // Number of posts on one page
+    $skip = ($page - 1) * $limit;
+    $postsList = $post->getPostsPerTag($tag_id, $limit, $skip);
+    $count = count($post->getPostsPerTag($tag_id));
+
+    $p= array_map(function($t) {
+        $tags = new Tag($this->db);
+        $t['tags'] = $tags->getTagsByPostId($t['id']);
+        return $t;
+    }, $postsList);
+
+    return $this->view->render($response, 'tags.twig', [
+        'tagsList' => $tagsList,
+        'posts' => $p,
+        'tagName' => $tagName,
+        'tagId' => $tag_id,
+        'pagination' => [
+            'needed' => $count > $limit,
+            'count' => $count,
+            'page' => $page,
+            'lastpage' => (ceil($count / $limit) == 0 ? 1 : ceil($count / $limit)),
+            'limit' => $limit
+        ]
+    ]);
+});
+
 $app->post('/tag', function ($request, $response, $args) {
     $tag = new Tag($this->db);
+    $post = new Post($this->db);
     $data = $request->getParsedBody();
     $tagName = $data['tag'];
     $tag_id = $tag->getTagId($tagName)['id'];
     switch ($data['action']) {
         case 'List Entries':
             $tagsList = $tag->getTags();
-            $postsList = $tag->getPostsPerTag($tag_id);
+
+            $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
+            $limit = 5; // Number of posts on one page
+            $skip = ($page - 1) * $limit;
+            $postsList = $post->getPostsPerTag($tag_id, $limit, $skip);
+            $count = count($post->getPostsPerTag($tag_id));
+            //print_r($postsList); die;
+
             $p= array_map(function($t) {
                 $tags = new Tag($this->db);
                 $t['tags'] = $tags->getTagsByPostId($t['id']);
                 return $t;
             }, $postsList);
+
             return $this->view->render($response, 'tags.twig', [
                 'tagsList' => $tagsList,
                 'posts' => $p,
-                'tagName' => $tagName
+                'tagName' => $tagName,
+                'tagId' => $tag_id,
+                'pagination' => [
+                    'needed' => $count > $limit,
+                    'count' => $count,
+                    'page' => $page,
+                    'lastpage' => (ceil($count / $limit) == 0 ? 1 : ceil($count / $limit)),
+                    'limit' => $limit
+                ]
             ]);
         case 'Update':
             return $this->view->render($response, 'tagUpdate.twig', [

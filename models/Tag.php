@@ -23,22 +23,6 @@ class Tag
 
         return $tags;
     }
-    public function getPostsPerTag($tag_id) {
-        try {
-            $results =  $this->database->query('SELECT posts.* FROM posts JOIN posts_tags
-                                    ON posts.id = posts_tags.posts_id
-                                    WHERE posts_tags.tags_id = :tag_id
-                                    ORDER BY posts.date DESC');
-            $results->bindParam('tag_id', $tag_id);
-            $results->execute();
-        } catch (Exception $e) {
-           $e->getMessage();
-        }
-    
-        $entries = $results->fetchAll();
-    
-        return $entries;
-    }
     public function getTags()
     {
         $statement = $this->database->prepare('SELECT name FROM tags ORDER BY name');

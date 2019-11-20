@@ -9,17 +9,55 @@ class Post
     {
         $this->database = $database;
     }
-    public function getPosts()
+    public function countPosts()
     {
         $statement = $this->database->prepare(
-            'SELECT * FROM posts ORDER BY date DESC'
+            'SELECT COUNT(*) FROM posts'
         );
+        $statement->execute();
+        $posts = $statement->fetch()[0];
+        if (empty($posts)) {
+            throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
+        }
+        return $posts;
+    }
+    public function getPosts($limit, $skip)
+    {
+        $statement = $this->database->prepare(
+            'SELECT * FROM posts ORDER BY date DESC LIMIT :limit OFFSET :skip'
+        );
+        $statement->bindParam('limit', $limit);
+        $statement->bindParam('skip', $skip);
         $statement->execute();
         $posts = $statement->fetchAll();
         if (empty($posts)) {
             throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
         }
         return $posts;
+    }
+    public function getPostsPerTag($tag_id, $limit = null, $skip = 0) {
+        try {
+            $query = "SELECT posts.* FROM posts JOIN posts_tags
+                        ON posts.id = posts_tags.posts_id
+                        WHERE posts_tags.tags_id = :tag_id
+                        ORDER BY posts.date DESC";
+            if (!empty($limit)) {
+                $query .= " LIMIT :limit OFFSET :skip";
+            }
+            $results =  $this->database->prepare($query);
+            $results->bindParam('tag_id', $tag_id);
+            if (!empty($limit)) {
+                $results->bindParam('limit', $limit);
+                $results->bindParam('skip', $skip);
+            }
+            $results->execute();
+        } catch (Exception $e) {
+           $e->getMessage();
+        }
+    
+        $entries = $results->fetchAll();
+    
+        return $entries;
     }
     public function getPost($post_id)
     {

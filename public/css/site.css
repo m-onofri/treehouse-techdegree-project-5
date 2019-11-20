@@ -257,8 +257,9 @@ a.link {
 	width: 450px;
 	margin: 50px auto 0;
 }
-.container-tags h4 {
+.container-tags h3 {
 	text-align: center;
+	margin-top: 1rem;
 }
 .container-tags .entry-list {
 	padding-top: 30px;
