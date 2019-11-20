@@ -59,3 +59,7 @@ $container['tag'] = function ($c) {
     return $tag;
 };
 
+$container['flash'] = function () {
+    return new \Slim\Flash\Messages();
+};
+

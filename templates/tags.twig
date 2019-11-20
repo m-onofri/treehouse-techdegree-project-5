@@ -5,7 +5,7 @@
     <!-- Display the form to select a tag and the buttons to update or delete the selected tag -->
     <form action="tag" method="post">
         <select name="tag">
-        <option>Select a tag</option>
+        <option value="">Select a tag</option>
         {% for tag in tagsList %}
             {% if tag_id is not empty and tag == tag_name %}
                 <option value='{{ tag }}' selected>{{ tag }}</option>

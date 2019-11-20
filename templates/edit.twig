@@ -4,6 +4,7 @@
                 <div class="edit-entry">
                     <div class="edit-header">
                         <h2>Edit Post</h2>
+                         <p>{{ msg }}</p>
                         <form action="/delete" method="POST"
                             onsubmit="return confirm('Are you sure you want to delete this post?')">
                             <input type='hidden' value='{{ post.id }}' name='id' />
