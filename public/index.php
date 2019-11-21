@@ -23,9 +23,9 @@ require __DIR__ . '/../src/dependencies.php';
 require __DIR__ . '/../src/middleware.php';
 
 // Register models
-require __DIR__ . '/../models/Post.php';
-require __DIR__ . '/../models/Comment.php';
-require __DIR__ . '/../models/Tag.php';
+require __DIR__ . '/../src/models/Post.php';
+require __DIR__ . '/../src/models/Comment.php';
+require __DIR__ . '/../src/models/Tag.php';
 
 // Register routes
 require __DIR__ . '/../src/routes.php';
