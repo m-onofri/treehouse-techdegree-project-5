@@ -1,68 +1,69 @@
-{{ include('inc/header.php') }}
-<section>
-    <div class="container-detail">
-        <div class="single">
-            <article>
-                <div class="article-header">
-                    <h1>{{ post.title }}</h1>
-                    <a class="button edit-button" href="/edit/{{ post.id }}">Edit Post</a>
-                </div>
-                <time datetime="{{ post.date }}">
-                    Posted on {{ post.date|date("F j, Y \\a\\t H:i") }}
-                </time>
-                {% if post.update_date is not empty %}
-                    <h4>Last update: {{ post.update_date|date("F j, Y \\a\\t H:i") }}</h4>
-                {% endif %}
-                {% if tags is not empty %}
-                    <div class='tags-list'>
-                        {% for tag in tags %}
-                            <a href='tags.php?id={{ tag.id }}' class='button button-tag'>{{ tag.name }}</a>
-                        {% endfor %}
+{% extends 'base.twig' %}
+{% block content %}
+    <section>
+        <div class="container-detail">
+            <div class="single">
+                <article>
+                    <div class="article-header">
+                        <h1>{{ post.title }}</h1>
+                        <a class="button edit-button" href="/edit/{{ post.id }}">Edit Post</a>
                     </div>
-                {% endif %} 
-                <div class="entry">
-                    <p>{{ post.body }}></p>
-                </div>
-            </article>
-        </div>
-    </div>
-</section>
-<section class="entry-comments">
-    <div class="container">
-        <h2>Comments</h2>
-        {% if comments is not empty %}
-            {% for comment in comments %}
-                <div class="comment">
-                    <strong>{{ comment.name }}</strong>
-                    <time datetime="{{ comment.date }}">
-                        {{ post.date|date("F j, Y \\a\\t H:i") }}
+                    <time datetime="{{ post.date }}">
+                        Posted on {{ post.date|date("F j, Y \\a\\t H:i") }}
                     </time>
-                    <form action="/comment/delete" method="POST"
-                        onsubmit="return confirm('Are you sure you want to delete this comment?')">
-                        <input type='hidden' value='{{ comment.id }}' name='comment_id' />
-                        <input type='hidden' value='{{ post.id }}' name='post_id' />
-                        <input type='submit' class='button button-delete' value='delete' />
-                    </form>
-                    <p>{{ comment.body }}</p>
-                </div>
-            {% endfor %}
-        {% else %}
-            <div class="comment">
-                <h4>No comments yet. Post the first comment!</h4>
+                    {% if post.update_date is not empty %}
+                        <h4>Last update: {{ post.update_date|date("F j, Y \\a\\t H:i") }}</h4>
+                    {% endif %}
+                    {% if tags is not empty %}
+                        <div class='tags-list'>
+                            {% for tag in tags %}
+                                <a href='tags.php?id={{ tag.id }}' class='button button-tag'>{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                    {% endif %} 
+                    <div class="entry">
+                        <p>{{ post.body }}</p>
+                    </div>
+                </article>
             </div>
-        {% endif %}
-        
-        <div class="new-comment">
-        <p>{{msg}}</p>
-            <form method="POST" action="/comment/new">
-                <label for="name"> Name</label>
-                <input type="text" name="name"><br>
-                <label for="comment">Comment</label>
-                <textarea rows="5" name="body"></textarea>
-                <input type="hidden" name="post_id" value="{{ post.id }}">
-                <input type="submit" value="Post Comment" class="button">
-            </form>
         </div>
-    </div>
-</section>
-{{ include('inc/footer.php') }}
+    </section>
+    <section class="entry-comments">
+        <div class="container">
+            <h2>Comments</h2>
+            {% if comments is not empty %}
+                {% for comment in comments %}
+                    <div class="comment">
+                        <strong>{{ comment.name }}</strong>
+                        <time datetime="{{ comment.date }}">
+                            {{ post.date|date("F j, Y \\a\\t H:i") }}
+                        </time>
+                        <form action="/comment/delete" method="POST"
+                            onsubmit="return confirm('Are you sure you want to delete this comment?')">
+                            <input type='hidden' value='{{ comment.id }}' name='comment_id' />
+                            <input type='hidden' value='{{ post.id }}' name='post_id' />
+                            <input type='submit' class='button button-delete' value='delete' />
+                        </form>
+                        <p>{{ comment.body }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="comment">
+                    <h4>No comments yet. Post the first comment!</h4>
+                </div>
+            {% endif %}
+            
+            <div class="new-comment">
+            <p>{{msg}}</p>
+                <form method="POST" action="/comment/new">
+                    <label for="name"> Name</label>
+                    <input type="text" name="name"><br>
+                    <label for="comment">Comment</label>
+                    <textarea rows="5" name="body"></textarea>
+                    <input type="hidden" name="post_id" value="{{ post.id }}">
+                    <input type="submit" value="Post Comment" class="button">
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

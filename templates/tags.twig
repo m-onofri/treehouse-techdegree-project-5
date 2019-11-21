@@ -1,5 +1,6 @@
 {% set uri = '/tag?tag=' ~ tagId ~ '&' %}
-{{ include('inc/header.php') }}
+{% extends 'base.twig' %}
+{% block content %}
 
 <div class="tags-control">
     <!-- Display the form to select a tag and the buttons to update or delete the selected tag -->
@@ -7,7 +8,7 @@
         <select name="tag">
         <option value="">Select a tag</option>
         {% for tag in tagsList %}
-            {% if tag_id is not empty and tag == tag_name %}
+            {% if tagId is not empty and tag == tagName %}
                 <option value='{{ tag }}' selected>{{ tag }}</option>
             {% else %}
                 <option value='{{ tag }}'>{{ tag }}</option>
@@ -38,4 +39,4 @@
     </div>
 </section>
     
-{{ include('inc/footer.php') }}
+{% endblock %}

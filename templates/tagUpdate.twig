@@ -1,18 +1,17 @@
-{{ include('inc/header.php') }}
-
-<section>
-    <div class="container-tags">
-    <div class="entry-list">
-        <p>{{ msg }}</p>
-        <form action="tag/update" method="post">
-            <label for="current-name">Current tag name</label>
-            <input type="text" id="current-name" name="current-name" value="{{ tagName }}" />
-            <label for="current-name">New tag name</label>
-            <input type="text" id="new-name" name="new-name">
-            <input type="submit" class="button" value="update" name="change-tag-name">
-        </form>
-    </div>
-</div>
-</section>
-    
-{{ include('inc/footer.php') }}
+{% extends 'base.twig' %}
+{% block content %}
+    <section>
+        <div class="container-tags">
+            <div class="entry-list">
+                <p>{{ msg }}</p>
+                <form action="tag/update" method="post">
+                    <label for="current-name">Current tag name</label>
+                    <input type="text" id="current-name" name="current-name" value="{{ tagName }}" />
+                    <label for="current-name">New tag name</label>
+                    <input type="text" id="new-name" name="new-name">
+                    <input type="submit" class="button" value="update" name="change-tag-name">
+                </form>
+            </div>
+        </div>
+    </section>  
+{% endblock %}

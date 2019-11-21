@@ -1,8 +1,9 @@
 {% set uri = '/?' %}
-{{ include('inc/header.php') }}
+{% extends 'base.twig' %}
+{% block content %}
         <section>
             <div class="container-index">
                 {{ include('inc/postsList.twig') }}
             </div>
         </section>
-{{ include('inc/footer.php') }}     
+{% endblock %}     
