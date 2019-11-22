@@ -23,6 +23,7 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
+// connect to DB
 $container['db'] = function ($c) {
     $db = $c->get('settings')['db'];
     $pdo = new PDO("sqlite:".$db['path']);
@@ -30,7 +31,7 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
-// Register component on container
+// twig
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig( __DIR__ . '/../templates/', [
         'cache' => false
@@ -44,21 +45,25 @@ $container['view'] = function ($container) {
     return $view;
 };
 
+//Post Model
 $container['post'] = function ($c) {
     $post = new Post($c->db);
     return $post;
 };
 
+//Comment Model
 $container['comment'] = function ($c) {
     $comment = new Comment($c->db);
     return $comment;
 };
 
+//Tag Model
 $container['tag'] = function ($c) {
     $tag = new Tag($c->db);
     return $tag;
 };
 
+//Flash Messages
 $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };

@@ -8,6 +8,7 @@ class Post
     {
         $this->database = $database;
     }
+    //Return the total number of available posts
     public function countPosts()
     {
         try {
@@ -20,6 +21,8 @@ class Post
 
         return $postNumber;
     }
+    /**Return all the available posts
+     * 2 required arguments: $limit (integer), $skip (integer)*/
     public function getPosts($limit, $skip)
     {
         try {
@@ -36,6 +39,9 @@ class Post
         
         return $posts;
     }
+    /**Return all the available posts with a specific tag
+     * 1 required argument: $tag_id (integer)
+     * 2 optional arguments: $limit (integer), $skip (integer)*/
     public function getPostsPerTag($tag_id, $limit = null, $skip = 0) {
         try {
             $query = "SELECT posts.* FROM posts JOIN posts_tags
@@ -59,6 +65,8 @@ class Post
     
         return $this->implementTags($entries);
     }
+    /**Return a specific post
+     * 1 required argument: $post_id (integer)*/
     public function getPost($post_id)
     {
         try {
@@ -72,6 +80,9 @@ class Post
 
         return $singlePost;
     }
+    /**Add a new post to the database
+     * 1 required argument: $data (array)
+     * Return the new added post*/
     public function createPost($data)
     {
         try {
@@ -88,6 +99,9 @@ class Post
   
         return $this->getPost($this->database->lastInsertId());
     }
+    /**Update an existing post
+     * 1 required argument: $data (array)
+     * Return the updated post*/
     public function updatePost($data)
     {
         try {
@@ -111,6 +125,9 @@ class Post
 
         return $this->getPost($data['id']);
     }
+    /**Delete a specific post
+     * 1 required argument: $post_id (integer)
+     * Return true if the post was deleted, otherwise false*/
     public function deletePost($post_id)
     {
         try {
@@ -129,7 +146,8 @@ class Post
     
         return false;
     }
-
+    /**Return all the tags associated to a specific post
+     * 1 required argument: $post_id (integer)*/
     public function getTagsByPostId($post_id)
     {
         try {
@@ -146,7 +164,8 @@ class Post
 
         return $tags;
     }
-
+    /**Add the tags to the post data array
+     * 1 required argument: $post_id (integer)*/
     protected function implementTags($posts)
     {
         return array_map(function($t) {

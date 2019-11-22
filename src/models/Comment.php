@@ -8,6 +8,8 @@ class Comment
     {
         $this->database = $database;
     }
+    /**Return all the comments associated to a specific post
+     * 1 required argument: $post_id (integer)*/
     public function getCommentsByPostId($post_id)
     {
         try {
@@ -21,6 +23,8 @@ class Comment
         
         return $comments;
     }
+    /**Return a specific comment
+     * 1 required argument: $comment_id (integer)*/
     public function getComment($comment_id)
     {
         try {
@@ -34,6 +38,9 @@ class Comment
         
         return $comment;
     }
+    /**Create a new comment
+     * 1 required argument: $data (array)
+     * Return true if the comment was created, otherwise false*/
     public function createComment($data)
     {
         try {
@@ -43,24 +50,32 @@ class Comment
             $statement->bindParam('name', $data['name']);
             $statement->bindParam('body', $data['body']);
             $statement->bindParam('date', $data['date']);
-            $statement->execute();
+            if ($statement->execute()) {
+                return true;
+            }
         } catch (Exception $e) {
             $e->getMessage();
         }
         
-        return $this->getComment($this->database->lastInsertId());
+        return false;
     }
+    /**Delete a specific comment
+     * 1 required argument: $comment_id (integer)
+     * Return true if the comment was created, otherwise false*/
     public function deleteComment($comment_id)
     {
         try {
             $this->getComment($comment_id);
             $statement = $this->database->prepare('DELETE FROM comments WHERE id=:id');
             $statement->bindParam('id', $comment_id);
-            $statement->execute();
+            if ($statement->execute()) {
+                return true;
+            }
+            
         } catch (Exception $e) {
             $e->getMessage();
         }
         
-        return ['message' => 'The review was deleted.'];
+        return false;
     }
 }

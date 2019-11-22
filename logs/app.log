@@ -50,3 +50,4 @@
 [2019-11-21 17:05:01] slim-app.INFO: Delete Post [] {"uid":"72b23ec"}
 [2019-11-21 17:28:05] slim-app.INFO: Create new Comment [] {"uid":"ba2da43"}
 [2019-11-21 17:28:22] slim-app.INFO: Delete Comment [] {"uid":"69faeea"}
+[2019-11-22 08:19:03] slim-app.INFO: Create new Comment [] {"uid":"ed7d043"}

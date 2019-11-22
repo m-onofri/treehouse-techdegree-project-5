@@ -8,6 +8,8 @@ class Tag
     {
         $this->database = $database;
     }
+    /**Return all the tags associated to a specific post
+     * 1 required argument: $post_id (integer)*/
     public function getTagsByPostId($post_id)
     {
         try {
@@ -25,6 +27,7 @@ class Tag
 
         return $tags;
     }
+    /*Return all the available tags*/
     public function getTags()
     {
         try {
@@ -37,6 +40,8 @@ class Tag
         
         return $tags;
     }
+    /**Return a specific tag name
+     * 1 required argument: $tag_id (integer)*/
     public function getTag($tag_id)
     {
         try {
@@ -50,6 +55,8 @@ class Tag
         
         return $tag_name;
     }
+    /**Return the id of a specific tag
+     * 1 required argument: $tag (string)*/
     public function getTagId($tag)
     {
         try {
@@ -63,6 +70,10 @@ class Tag
         
         return $tag_id;
     }
+    /**Add a new tag or update an existing tag
+     * 1 required argument: $tag (string)
+     * 1 optional argument: $id (integer)
+     * Return true if a new tag was created, return the id if an existing tag was updated otherwise false*/
     public function addSingleTag($tag, $id = null)
     {
         try {
@@ -88,13 +99,11 @@ class Tag
         }
         return false;
     }
+    /**Handle add tags
+     * 2 required arguments: $tags (string)
+     * Return true if all the tags are processed correctly*/
     public function addTags($tags, $post_id)
     {
-        try {
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
         $tags_arr = array_map(function($t) {return trim($t);}, explode(',', $tags));
         //Get all the tags in the tags table
         $tags_list = $this->getTags();
@@ -137,6 +146,9 @@ class Tag
     
         return true;
     }
+    /**Delete a specific tag from a specific post
+     * 2 required arguments: $post_id (integer), $tag_id(integer)
+     * Return true if the tag was deleted, otherwise false*/
     public function deletePostTag($post_id, $tag_id)
     {
         try {
@@ -153,6 +165,9 @@ class Tag
     
         return false;
     }
+    /**Delete a specific tag
+     * 1 required argument: $tag_id (integer)
+     * Return true if the tag was deleted, otherwise false*/
     public function deleteTag($tag_id) {
     
         try {
