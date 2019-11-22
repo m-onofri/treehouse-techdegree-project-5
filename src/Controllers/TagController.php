@@ -1,14 +1,11 @@
 <?php
 namespace App\Controllers;
-use Psr\Container\ContainerInterface;
 
 class TagController
 {
     protected $postModel;
     protected $tagModel;
     protected $view;
-    protected $flash;
-    protected $logger;
 
     public function __construct($container) {
         $this->postModel = $container->get('post');

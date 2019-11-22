@@ -1,23 +1,14 @@
 <?php
 namespace App\Controllers;
-use Psr\Container\ContainerInterface;
 
 class CommentController
 {
-    protected $container;
-    protected $postModel;
     protected $commentModel;
-    protected $tagModel;
-    protected $view;
     protected $flash;
     protected $logger;
 
     public function __construct($container) {
-        $this->container = $container;
-        $this->postModel = $container->get('post');
         $this->commentModel = $container->get('comment');
-        $this->tagModel = $container->get('tag');
-        $this->view = $container->get('view');
         $this->flash = $container->get('flash');
         $this->logger = $container->get('logger');
     }

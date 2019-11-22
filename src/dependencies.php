@@ -63,13 +63,3 @@ $container['tag'] = function ($c) {
 $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };
-
-// $container['PostController'] = function($c) {
-//     $view = $c->get("view"); // retrieve the 'view' from the container
-//     $comment = $c->get("comment"); // retrieve the Comment Model from the container
-//     $tag = $c->get("tag"); // retrieve the Tag Model from the container
-//     $post = $c->get("post"); // retrieve the Post Model from the container
-//     $flash = $c->get("flash");
-//     return new PostController($container);
-// };
-

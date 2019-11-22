@@ -1,10 +1,8 @@
 <?php
 namespace App\Controllers;
-use Psr\Container\ContainerInterface;
 
 class PostController
 {
-    protected $container;
     protected $postModel;
     protected $commentModel;
     protected $tagModel;
@@ -13,7 +11,6 @@ class PostController
     protected $logger;
 
     public function __construct($container) {
-        $this->container = $container;
         $this->postModel = $container->get('post');
         $this->commentModel = $container->get('comment');
         $this->tagModel = $container->get('tag');
