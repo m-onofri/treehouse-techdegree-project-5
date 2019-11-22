@@ -37,7 +37,7 @@ class Post
             $e->getMessage();
         }
         
-        return $posts;
+        return $this->implementTags($posts);
     }
     /**Return all the available posts with a specific tag
      * 1 required argument: $tag_id (integer)

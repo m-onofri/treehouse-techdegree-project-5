@@ -21,3 +21,8 @@
                 </div>
             </div>
         </header>
+        {% if msg is not empty %}
+            <div class="alert">
+                <p>{{ msg }}</p>
+            </div>
+        {% endif %}
