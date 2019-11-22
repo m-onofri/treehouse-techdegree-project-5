@@ -1,6 +1,5 @@
 <?php
 namespace App\Models;
-use App\Exception\ApiException;
 
 class Post
 {
@@ -11,29 +10,31 @@ class Post
     }
     public function countPosts()
     {
-        $statement = $this->database->prepare(
-            'SELECT COUNT(*) FROM posts'
-        );
-        $statement->execute();
-        $posts = $statement->fetch()[0];
-        if (empty($posts)) {
-            throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
+        try {
+            $statement = $this->database->prepare('SELECT COUNT(*) FROM posts');
+            $statement->execute();
+            $postNumber = $statement->fetch()[0];
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        return $posts;
+
+        return $postNumber;
     }
     public function getPosts($limit, $skip)
     {
-        $statement = $this->database->prepare(
-            'SELECT * FROM posts ORDER BY date DESC LIMIT :limit OFFSET :skip'
-        );
-        $statement->bindParam('limit', $limit);
-        $statement->bindParam('skip', $skip);
-        $statement->execute();
-        $posts = $statement->fetchAll();
-        if (empty($posts)) {
-            throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
+        try {
+            $statement = $this->database->prepare(
+                'SELECT * FROM posts ORDER BY date DESC LIMIT :limit OFFSET :skip'
+            );
+            $statement->bindParam('limit', $limit);
+            $statement->bindParam('skip', $skip);
+            $statement->execute();
+            $posts = $statement->fetchAll();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        return $this->implementTags($posts);
+        
+        return $posts;
     }
     public function getPostsPerTag($tag_id, $limit = null, $skip = 0) {
         try {
@@ -51,67 +52,63 @@ class Post
                 $results->bindParam('skip', $skip);
             }
             $results->execute();
+            $entries = $results->fetchAll();
         } catch (Exception $e) {
            $e->getMessage();
         }
-    
-        $entries = $results->fetchAll();
     
         return $this->implementTags($entries);
     }
     public function getPost($post_id)
     {
-        $statement = $this->database->prepare(
-            'SELECT * FROM posts WHERE id=:id'
-        );
-        $statement->bindParam('id', $post_id);
-        $statement->execute();
-        $post = $statement->fetch();
-        if (empty($post)) {
-            throw new ApiException(ApiException::COURSE_NOT_FOUND, 404);
+        try {
+            $statement = $this->database->prepare('SELECT * FROM posts WHERE id=:id');
+            $statement->bindParam('id', $post_id);
+            $statement->execute();
+            $singlePost = $statement->fetch();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        return $post;
+
+        return $singlePost;
     }
     public function createPost($data)
     {
-        if (empty($data['title']) || empty($data['entry']) || empty($data['date'])) {
-            throw new ApiException(ApiException::COURSE_INFO_REQUIRED);
+        try {
+            $statement = $this->database->prepare(
+                'INSERT INTO posts (title, body, date) VALUES (:title, :body, :date)'
+            );
+            $statement->bindParam('title', $data['title']);
+            $statement->bindParam('body', $data['entry']);
+            $statement->bindParam('date', $data['date']);
+            $statement->execute();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        $statement = $this->database->prepare(
-            'INSERT INTO posts (title, body, date) VALUES (:title, :body, :date)'
-        );
-        $statement->bindParam('title', $data['title']);
-        $statement->bindParam('body', $data['entry']);
-        $statement->bindParam('date', $data['date']);
-        $statement->execute();
-        if ($statement->rowCount()<1) {
-            throw new ApiException(ApiException::COURSE_CREATION_FAILED);
-        }
+  
         return $this->getPost($this->database->lastInsertId());
     }
     public function updatePost($data)
     {
-        if (empty($data['id']) || empty($data['title']) || empty($data['entry'])) {
-            throw new ApiException(ApiException::COURSE_INFO_REQUIRED);
+        try {
+            $query = 'UPDATE posts SET title=:title, body=:body,';
+            if(!empty($data['update_date'])) {
+                $query .= ' update_date=:update_date';
+            }
+            $query .= ' WHERE id=:id';
+
+            $statement = $this->database->prepare($query);
+            $statement->bindParam('title', $data['title']);
+            $statement->bindParam('body', $data['entry']);
+            $statement->bindParam('id', $data['id']);
+            if(!empty($data['update_date'])) {
+                $statement->bindParam('update_date', $data['update_date']);
+            }
+            $statement->execute();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
 
-        $query = 'UPDATE posts SET title=:title, body=:body,';
-        if(!empty($data['update_date'])) {
-            $query .= ' update_date=:update_date';
-        }
-        $query .= ' WHERE id=:id';
-
-        $statement = $this->database->prepare($query);
-        $statement->bindParam('title', $data['title']);
-        $statement->bindParam('body', $data['entry']);
-        $statement->bindParam('id', $data['id']);
-        if(!empty($data['update_date'])) {
-            $statement->bindParam('update_date', $data['update_date']);
-        }
-        $statement->execute();
-        if ($statement->rowCount()<1) {
-            throw new ApiException(ApiException::COURSE_UPDATE_FAILED);
-        }
         return $this->getPost($data['id']);
     }
     public function deletePost($post_id)
@@ -136,10 +133,12 @@ class Post
     public function getTagsByPostId($post_id)
     {
         try {
-            $statement = $this->database->prepare('SELECT tags.name, tags.id FROM tags JOIN posts_tags ON tags.id = posts_tags.tags_id WHERE posts_tags.posts_id = :post_id');
+            $statement = $this->database->prepare(
+                'SELECT tags.name, tags.id FROM tags 
+                    JOIN posts_tags ON tags.id = posts_tags.tags_id 
+                    WHERE posts_tags.posts_id = :post_id');
             $statement->bindParam('post_id', $post_id);
             $statement->execute();
-    
             $tags = $statement->fetchAll();
         } catch (Exception $e) {
             $e->getMessage();

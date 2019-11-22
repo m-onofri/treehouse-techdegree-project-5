@@ -1,6 +1,5 @@
 <?php
 namespace App\Models;
-use \App\Exception\ApiException;
 
 class Tag
 {
@@ -12,7 +11,10 @@ class Tag
     public function getTagsByPostId($post_id)
     {
         try {
-            $statement = $this->database->prepare('SELECT tags.name, tags.id FROM tags JOIN posts_tags ON tags.id = posts_tags.tags_id WHERE posts_tags.posts_id = :post_id');
+            $statement = $this->database->prepare(
+                'SELECT tags.name, tags.id FROM tags 
+                JOIN posts_tags ON tags.id = posts_tags.tags_id 
+                WHERE posts_tags.posts_id = :post_id');
             $statement->bindParam('post_id', $post_id);
             $statement->execute();
     
@@ -25,44 +27,44 @@ class Tag
     }
     public function getTags()
     {
-        $statement = $this->database->prepare('SELECT name FROM tags ORDER BY name');
-        $statement->execute();
-        $tags = array_map(function($t) { return $t['name'];}, $statement->fetchAll());
+        try {
+            $statement = $this->database->prepare('SELECT name FROM tags ORDER BY name');
+            $statement->execute();
+            $tags = array_map(function($t) { return $t['name'];}, $statement->fetchAll());
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+        
         return $tags;
     }
     public function getTag($tag_id)
     {
-        if (empty($tag_id)) {
-            throw new ApiException(ApiException::REVIEW_INFO_REQUIRED);
+        try {
+            $statement = $this->database->prepare('SELECT name FROM tags WHERE id=:id');
+            $statement->bindParam('id', $tag_id);
+            $statement->execute();
+            $tag_name = $statement->fetch();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        $statement = $this->database->prepare('SELECT name FROM tags WHERE id=:id');
-        $statement->bindParam('id', $tag_id);
-        $statement->execute();
-        $tag_name = $statement->fetch();
-        if (empty($tag_name)) {
-            throw new ApiException(ApiException::REVIEW_NOT_FOUND, 404);
-        }
+        
         return $tag_name;
     }
     public function getTagId($tag)
     {
-        if (empty($tag)) {
-            throw new ApiException(ApiException::REVIEW_INFO_REQUIRED);
+        try {
+            $statement = $this->database->prepare('SELECT id FROM tags WHERE name=:name');
+            $statement->bindParam('name', $tag);
+            $statement->execute();
+            $tag_id = $statement->fetch();
+        } catch (Exception $e) {
+            $e->getMessage();
         }
-        $statement = $this->database->prepare('SELECT id FROM tags WHERE name=:name');
-        $statement->bindParam('name', $tag);
-        $statement->execute();
-        $tag_id = $statement->fetch();
-        if (empty($tag_id)) {
-            throw new ApiException(ApiException::REVIEW_NOT_FOUND, 404);
-        }
+        
         return $tag_id;
     }
     public function addSingleTag($tag, $id = null)
     {
-        if (empty($tag)) {
-            throw new ApiException(ApiException::REVIEW_INFO_REQUIRED);
-        }
         try {
             if (!empty($id)) {
                 $result = $this->database->prepare('UPDATE tags SET name = :name WHERE id = :id');
@@ -88,6 +90,11 @@ class Tag
     }
     public function addTags($tags, $post_id)
     {
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         $tags_arr = array_map(function($t) {return trim($t);}, explode(',', $tags));
         //Get all the tags in the tags table
         $tags_list = $this->getTags();
@@ -133,13 +140,13 @@ class Tag
     public function deletePostTag($post_id, $tag_id)
     {
         try {
-            $result = $this->database->prepare('DELETE FROM posts_tags WHERE posts_id = :post_id AND tags_id = :tag_id');
+            $result = $this->database->prepare(
+                'DELETE FROM posts_tags WHERE posts_id = :post_id AND tags_id = :tag_id');
             $result->bindParam("post_id", $post_id);
             $result->bindParam("tag_id", $tag_id);
             if ($result->execute()) {
                 return true;
-            }
-            
+            }  
         } catch (Exception $e) {
             $e->getMessage();
         }

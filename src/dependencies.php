@@ -5,7 +5,6 @@ use App\Models\{
     Comment as Comment,
     Tag as Tag
 };
-use App\Controllers\PostController as PostController;
 
 $container = $app->getContainer();
 
