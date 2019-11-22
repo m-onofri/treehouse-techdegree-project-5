@@ -67,3 +67,7 @@ $container['tag'] = function ($c) {
 $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };
+
+$container['slugify'] = function () {
+    return new \Cocur\Slugify\Slugify();
+};

@@ -23,14 +23,18 @@ class Post
     }
     /**Return all the available posts
      * 2 required arguments: $limit (integer), $skip (integer)*/
-    public function getPosts($limit, $skip)
+    public function getPosts($limit=null, $skip=0)
     {
         try {
-            $statement = $this->database->prepare(
-                'SELECT * FROM posts ORDER BY date DESC LIMIT :limit OFFSET :skip'
-            );
-            $statement->bindParam('limit', $limit);
-            $statement->bindParam('skip', $skip);
+            $query = 'SELECT * FROM posts ORDER BY date DESC';
+            if (!empty($limit)) {
+                $query .= ' LIMIT :limit OFFSET :skip';
+            }
+            $statement = $this->database->prepare($query);
+            if (!empty($limit)) {
+                $statement->bindParam('limit', $limit);
+                $statement->bindParam('skip', $skip);
+            }
             $statement->execute();
             $posts = $statement->fetchAll();
         } catch (Exception $e) {
@@ -38,6 +42,22 @@ class Post
         }
         
         return $this->implementTags($posts);
+    }
+    /**Return all the available posts
+     * 2 required arguments: $limit (integer), $skip (integer)*/
+    public function getIdLastPost()
+    {
+        try {
+            $statement = $this->database->prepare(
+                'SELECT MAX(id) FROM posts'
+            );
+            $statement->execute();
+            $id = $statement->fetch();
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+        
+        return $id[0];
     }
     /**Return all the available posts with a specific tag
      * 1 required argument: $tag_id (integer)
@@ -67,11 +87,11 @@ class Post
     }
     /**Return a specific post
      * 1 required argument: $post_id (integer)*/
-    public function getPost($post_id)
+    public function getPost($slug)
     {
         try {
-            $statement = $this->database->prepare('SELECT * FROM posts WHERE id=:id');
-            $statement->bindParam('id', $post_id);
+            $statement = $this->database->prepare('SELECT * FROM posts WHERE slug=:slug');
+            $statement->bindParam('slug', $slug);
             $statement->execute();
             $singlePost = $statement->fetch();
         } catch (Exception $e) {
@@ -87,11 +107,12 @@ class Post
     {
         try {
             $statement = $this->database->prepare(
-                'INSERT INTO posts (title, body, date) VALUES (:title, :body, :date)'
+                'INSERT INTO posts (title, body, date, slug) VALUES (:title, :body, :date, :slug)'
             );
             $statement->bindParam('title', $data['title']);
             $statement->bindParam('body', $data['entry']);
             $statement->bindParam('date', $data['date']);
+            $statement->bindPAram('slug', $data['slug']);
             $statement->execute();
         } catch (Exception $e) {
             $e->getMessage();
@@ -105,19 +126,15 @@ class Post
     public function updatePost($data)
     {
         try {
-            $query = 'UPDATE posts SET title=:title, body=:body,';
-            if(!empty($data['update_date'])) {
-                $query .= ' update_date=:update_date';
-            }
-            $query .= ' WHERE id=:id';
-
-            $statement = $this->database->prepare($query);
+            $statement = $this->database->prepare(
+                'UPDATE posts 
+                SET title=:title, body=:body, update_date=:update_date, slug=:slug 
+                WHERE id=:id');
             $statement->bindParam('title', $data['title']);
             $statement->bindParam('body', $data['entry']);
+            $statement->bindParam('update_date', $data['update_date']);
+            $statement->bindParam('slug', $data['slug']);
             $statement->bindParam('id', $data['id']);
-            if(!empty($data['update_date'])) {
-                $statement->bindParam('update_date', $data['update_date']);
-            }
             $statement->execute();
         } catch (Exception $e) {
             $e->getMessage();

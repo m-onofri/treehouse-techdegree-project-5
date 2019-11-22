@@ -4,10 +4,10 @@ use App\Controllers\TagController;
 use App\Controllers\CommentController;
 
 $app->get('/', PostController::class . ':home');
-$app->get('/detail/{id}', PostController::class . ':singlePost');
+$app->get('/detail/{slug}', PostController::class . ':singlePost');
 $app->get('/new', PostController::class . ':newPost');
 $app->post('/new', PostController::class . ':createNewPost');
-$app->get('/edit/{id}', PostController::class . ':editPostForm');
+$app->get('/edit/{slug}', PostController::class . ':editPostForm');
 $app->post('/edit', PostController::class . ':editPost');
 $app->post('/delete', PostController::class . ':deletePost');
 

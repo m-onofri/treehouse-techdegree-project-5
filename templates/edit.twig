@@ -18,7 +18,8 @@
                     <textarea rows="5" name="entry">{{ post.body }}</textarea>
                     <label for="tags">Tags</label>
                     <textarea rows="2" class="ta-tag" name="tags">{{ tags|join(", ") }}</textarea>
-                    <input type="hidden" name="id" value="{{ post.id }}"><br>
+                    <input type="hidden" name="id" value="{{ post.id }}">
+                    <input type="hidden" name="slug" value="{{ post.slug }}">
                     <input type="submit" value="Update Post" class="button">
                     <a href="#" class="button button-secondary">Cancel</a>
                 </form>

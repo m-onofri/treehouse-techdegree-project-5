@@ -6,7 +6,7 @@
                 <article>
                     <div class="article-header">
                         <h1>{{ post.title }}</h1>
-                        <a class="button edit-button" href="/edit/{{ post.id }}">Edit Post</a>
+                        <a class="button edit-button" href="/edit/{{ post.slug }}">Edit Post</a>
                     </div>
                     <time datetime="{{ post.date }}">
                         Posted on {{ post.date|date("F j, Y \\a\\t H:i") }}
@@ -17,7 +17,7 @@
                     {% if tags is not empty %}
                         <div class='tags-list'>
                             {% for tag in tags %}
-                                <a href='tags.php?id={{ tag.id }}' class='button button-tag'>{{ tag.name }}</a>
+                                <a href='/tag?tag={{ tag.id }}' class='button button-tag'>{{ tag.name }}</a>
                             {% endfor %}
                         </div>
                     {% endif %} 

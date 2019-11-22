@@ -9,6 +9,7 @@ class PostController
     protected $view;
     protected $flash;
     protected $logger;
+    protected $slugify;
 
     public function __construct($container) {
         $this->postModel = $container->get('post');
@@ -17,10 +18,11 @@ class PostController
         $this->view = $container->get('view');
         $this->flash = $container->get('flash');
         $this->logger = $container->get('logger');
+        $this->slugify = $container->get('slugify');
     }
 
     public function home($request, $response, $args) {
-      //Set parameters for pagination
+        //Set parameters for pagination
         $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
         $limit = 5; // Number of posts on one page
         $skip = ($page - 1) * $limit;
@@ -44,9 +46,10 @@ class PostController
 
     public function singlePost($request, $response, $args) {
         //Get the post data and the relative comments and tags
-        $post = $this->postModel->getPost($args['id']);
-        $comments = $this->commentModel->getCommentsByPostId($args['id']);
-        $tags = $this->postModel->getTagsByPostId($args['id']);
+        //$postId = $this->postModel->getPostIdBySlug($args['slug']);
+        $post = $this->postModel->getPost($args['slug']);
+        $comments = $this->commentModel->getCommentsByPostId($post['id']);
+        $tags = $this->postModel->getTagsByPostId($post['id']);
 
         // Render single post
         return $this->view->render($response, 'detail.twig', [
@@ -72,6 +75,12 @@ class PostController
         }
         //Add the creation date of the post
         $data['date'] = date("Y-m-d H:i");
+        $slug = $this->slugify->slugify($data['title']);
+        if ($this->isSlugInPosts($slug)) {
+            $data['slug'] = $slug . "-" . ($this->postModel->getIdLastPost() + 1);
+        } else {
+            $data['slug'] = $slug;
+        }
         //Store all the data in the db
         $newPost = $this->postModel->createPost($data);
         if (!empty($data['tags'])) {
@@ -86,8 +95,8 @@ class PostController
 
     public function editPostForm($request, $response, $args) {
         //Get post data and relative tags name
-        $post = $this->postModel->getPost($args['id']);
-        $tags = array_map(function($t){return $t['name'];}, $this->tagModel->getTagsByPostId($args['id']));
+        $post = $this->postModel->getPost($args['slug']);
+        $tags = array_map(function($t){return $t['name'];}, $this->tagModel->getTagsByPostId($post['id']));
         // Render edit post page
         return $this->view->render($response, 'edit.twig', [
             'post' => $post,
@@ -102,17 +111,23 @@ class PostController
         if (empty($data['title']) || empty($data['entry'])) {
             //Check if title and entry are not empty
             $this->flash->addMessage('NoEdit', 'Title and Entry cannot be empty');
-            return $response->withRedirect("/edit/".$data['id'], 301);
+            return $response->withRedirect("/edit/".$data['slug'], 301);
         }
         //Add the edit date of the post
         $data['update_date'] = date("Y-m-d H:i");
+        $slug = $this->slugify->slugify($data['title']);
+        if ($this->isSlugInPosts($slug)) {
+            $data['slug'] = $slug . "-" . ($this->postModel->getIdLastPost() + 1);
+        } else {
+            $data['slug'] = $slug;
+        }
         //Update post data and relative tags name
         $this->postModel->updatePost($data);
         $this->tagModel->addTags($data['tags'], $data['id']);
         // Sample log message
         $this->logger->info("Update Post");
         // Redirect to the updated single post page
-        return $response->withRedirect("/detail/".$data['id'], 301);
+        return $response->withRedirect("/detail/".$data['slug'], 301);
     }
 
     public function deletePost($request, $response, $args) {
@@ -123,5 +138,16 @@ class PostController
         $this->logger->info("Delete Post");
         //Redirect to the index page
         return $response->withRedirect('/', 301);
+    }
+
+    private function isSlugInPosts($slug)
+    {
+        $posts = $this->postModel->getPosts();
+        foreach ($posts as $post) {
+            if ($post['slug'] == $slug) {
+                return true;
+            }
+        }
+        return false;
     }
 }
