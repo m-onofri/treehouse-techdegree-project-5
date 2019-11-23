@@ -124,7 +124,8 @@ class Tag
             if (!in_array($tag, $postTags)) {
                 //if not, add the entry id and the tag id to the enries_tags table
                 try {
-                    $result = $this->database->prepare('INSERT INTO posts_tags (posts_id, tags_id) VALUES (:posts_id, :tags_id)');
+                    $result = $this->database->prepare(
+                        'INSERT INTO posts_tags (posts_id, tags_id) VALUES (:posts_id, :tags_id)');
                     $result->bindParam("posts_id", $post_id);
                     $result->bindParam("tags_id", $tag_id);
                     $result->execute();

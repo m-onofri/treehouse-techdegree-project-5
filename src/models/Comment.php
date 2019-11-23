@@ -65,9 +65,27 @@ class Comment
     public function deleteComment($comment_id)
     {
         try {
-            $this->getComment($comment_id);
+            //$this->getComment($comment_id);
             $statement = $this->database->prepare('DELETE FROM comments WHERE id=:id');
             $statement->bindParam('id', $comment_id);
+            if ($statement->execute()) {
+                return true;
+            }
+            
+        } catch (Exception $e) {
+            $e->getMessage();
+        }
+        
+        return false;
+    }
+    /**Delete a specific comment
+     * 1 required argument: $comment_id (integer)
+     * Return true if the comment was created, otherwise false*/
+    public function deleteComments($post_id)
+    {
+        try {
+            $statement = $this->database->prepare('DELETE FROM comments WHERE post_id=:post_id');
+            $statement->bindParam('post_id', $post_id);
             if ($statement->execute()) {
                 return true;
             }

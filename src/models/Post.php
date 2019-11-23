@@ -87,11 +87,17 @@ class Post
     }
     /**Return a specific post
      * 1 required argument: $post_id (integer)*/
-    public function getPost($slug)
+    public function getPost($slug=null, $id=null)
     {
         try {
-            $statement = $this->database->prepare('SELECT * FROM posts WHERE slug=:slug');
-            $statement->bindParam('slug', $slug);
+            if (!empty($slug)) {
+                $statement = $this->database->prepare('SELECT * FROM posts WHERE slug=:slug');
+                $statement->bindParam('slug', $slug);
+            } else {
+                $statement = $this->database->prepare('SELECT * FROM posts WHERE id=:id');
+                $statement->bindParam('id', $id);
+            }
+            
             $statement->execute();
             $singlePost = $statement->fetch();
         } catch (Exception $e) {
@@ -117,8 +123,7 @@ class Post
         } catch (Exception $e) {
             $e->getMessage();
         }
-  
-        return $this->getPost($this->database->lastInsertId());
+        return $this->getPost(null, $this->database->lastInsertId());
     }
     /**Update an existing post
      * 1 required argument: $data (array)

@@ -69,7 +69,7 @@ class PostController
         $data = $request->getParsedBody();
         if (empty($data['title']) || empty($data['entry'])) {
             //Check if title and entry are not empty
-            $this->flash->addMessage('NoNew', 'Title and Entry cannot be empty!');
+            $this->flash->addMessage('NoNew', 'Title and Entry in the post cannot be empty!');
             return $response->withRedirect('/new', 301);
             //return $this->view->render($response, 'new.twig', ['msg' => 'Title and Entry cannot be empty']);
         }
@@ -83,6 +83,7 @@ class PostController
         }
         //Store all the data in the db
         $newPost = $this->postModel->createPost($data);
+        //print_r($newPost); die;
         if (!empty($data['tags'])) {
             //If there are tags, store them in the db
             $this->tagModel->addTags($data['tags'], $newPost['id']);
@@ -90,7 +91,7 @@ class PostController
         // Sample log message
         $this->logger->info("Create new Post");
         // Redirect to the new single post page
-        return $response->withRedirect('/detail/'.$newPost['id'], 301);
+        return $response->withRedirect('/detail/'.$newPost['slug'], 301);
     }
 
     public function editPostForm($request, $response, $args) {
@@ -110,7 +111,7 @@ class PostController
         $data = $request->getParsedBody();
         if (empty($data['title']) || empty($data['entry'])) {
             //Check if title and entry are not empty
-            $this->flash->addMessage('NoEdit', 'Title and Entry cannot be empty');
+            $this->flash->addMessage('NoEdit', 'Title and Entry in the post cannot be empty');
             return $response->withRedirect("/edit/".$data['slug'], 301);
         }
         //Add the edit date of the post
@@ -134,6 +135,7 @@ class PostController
         //Get id of the post to delete and delete it
         $id = $request->getParsedBody()['id'];
         $this->postModel->deletePost($id);
+        $this->commentModel->deleteComments($id);
         // Sample log message
         $this->logger->info("Delete Post");
         //Redirect to the index page
