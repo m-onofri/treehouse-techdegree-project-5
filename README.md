@@ -2,7 +2,7 @@
 
 The goal of this project is to create a blog using the Slim 3 framework, SQLite database and Twig as the template engine.
 
-# How to install 
+## How to install 
 
 Clone the git repository in the folder of your choice:
 ```
@@ -21,7 +21,7 @@ cd public
 php -S localhost:4000
 ```
 
-In your browser, go to http://localhost:4000/
+In your browser, go to http://localhost:4000/ and see the blog.
 
  ## Main features
 
@@ -41,9 +41,19 @@ In your browser, go to http://localhost:4000/
 
 ## Code organization
 
+* In the **'public'** folder you can find:
+    - the index.php file;
+    - **'css'** folder with all the styles of the project.
+* The **templates** folder contains all the twig files for the view.
+* in the **'src'** folder you can find:
+    - the subfolder models containing the **Post**, **Comment** and **Tag** classes, responsible for managing the data of the application;
+    - the subfolder controllers containing the **PostController**, **CommentController** and **TagController** classes, responsible for controlling the flow of the app execution;
+    - the routes.php file with all the routes of the project.
 
 ## Notes
 
+* Pagination: ...
+* Slug: ...
 
 ## Cross-browser consistency
 
