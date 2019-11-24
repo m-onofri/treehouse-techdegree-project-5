@@ -11,9 +11,11 @@
                     <time datetime="{{ post.date }}">
                         Posted on {{ post.date|date("F j, Y \\a\\t H:i") }}
                     </time>
+                    <!-- Display update date if exists -->
                     {% if post.update_date is not empty %}
                         <h4>Last update: {{ post.update_date|date("F j, Y \\a\\t H:i") }}</h4>
                     {% endif %}
+                    <!-- Display tags if exist -->
                     {% if tags is not empty %}
                         <div class='tags-list'>
                             {% for tag in tags %}
@@ -31,6 +33,7 @@
     <section class="entry-comments">
         <div class="container">
             <h2>Comments</h2>
+            <!-- Display comments if exist -->
             {% if comments is not empty %}
                 {% for comment in comments %}
                     <div class="comment">

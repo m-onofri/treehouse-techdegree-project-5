@@ -68,6 +68,7 @@ $container['flash'] = function () {
     return new \Slim\Flash\Messages();
 };
 
+//Slugify
 $container['slugify'] = function () {
     return new \Cocur\Slugify\Slugify();
 };

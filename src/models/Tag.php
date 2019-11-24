@@ -27,7 +27,7 @@ class Tag
 
         return $tags;
     }
-    /*Return all the available tags*/
+    /*Return all the available tags name*/
     public function getTags()
     {
         try {
@@ -73,7 +73,7 @@ class Tag
     /**Add a new tag or update an existing tag
      * 1 required argument: $tag (string)
      * 1 optional argument: $id (integer)
-     * Return true if a new tag was created, return the id if an existing tag was updated otherwise false*/
+     * Return true if a new tag was created, return the id if an existing tag was updated, otherwise false*/
     public function addSingleTag($tag, $id = null)
     {
         try {
@@ -100,7 +100,7 @@ class Tag
         return false;
     }
     /**Handle add tags
-     * 2 required arguments: $tags (string)
+     * 2 required arguments: $tags (string) and $post_id (integer)
      * Return true if all the tags are processed correctly*/
     public function addTags($tags, $post_id)
     {

@@ -28,25 +28,6 @@ class PostController
         return $this->view->render($response, 'index.twig', $this->pagination($request));
     }
 
-    protected function pagination($request)
-    {
-        //Set parameters for pagination
-        $page = $request->getParam('page', 0) > 0 ? $request->getParam('page') : 1;
-        $skip = ($page - 1) * $this->limit;
-        $count = $this->postModel->countPosts();
-        //Return parameters for pagination 
-        return [
-            'posts' => $this->postModel->getPosts($this->limit, $skip),
-            'pagination' => [
-                'needed' => $count > $this->limit,
-                'count' => $count,
-                'page' => $page,
-                'lastpage' => (ceil($count / $this->limit) == 0 ? 1 : ceil($count / $this->limit)),
-                'limit' => $this->limit
-            ]
-        ];
-    }
-
     public function singlePost($request, $response, $args) {
         //Get the post data and the relative comments and tags
         //$postId = $this->postModel->getPostIdBySlug($args['slug']);
@@ -64,21 +45,22 @@ class PostController
     }
 
     public function newPost($request, $response, $args) {
+        // Render form to insert new post
         return $this->view->render($response, 'new.twig', ['msg' => $this->flash->getFirstMessage('NoNew')]);
     }
 
     public function createNewPost($request, $response, $args) {
         //Get the data from the form
         $data = $request->getParsedBody();
+        //Check if title and entry are not empty
         if (empty($data['title']) || empty($data['entry'])) {
-            //Check if title and entry are not empty
             $this->flash->addMessage('NoNew', 'Title and Entry in the post cannot be empty!');
             return $response->withRedirect('/new', 301);
-            //return $this->view->render($response, 'new.twig', ['msg' => 'Title and Entry cannot be empty']);
         }
-        //Add the creation date of the post
+        //Add the creation date of the post and the slug
         $data['date'] = date("Y-m-d H:i");
         $slug = $this->slugify->slugify($data['title']);
+        //Check if the new slug is already in the db
         if ($this->isSlugInPosts($slug)) {
             $data['slug'] = $slug . "-" . ($this->postModel->getIdLastPost() + 1);
         } else {
@@ -86,12 +68,11 @@ class PostController
         }
         //Store all the data in the db
         $newPost = $this->postModel->createPost($data);
-        //print_r($newPost); die;
+        //If there are tags, store them in the db
         if (!empty($data['tags'])) {
-            //If there are tags, store them in the db
             $this->tagModel->addTags($data['tags'], $newPost['id']);
         }
-        // Sample log message
+        // Log message
         $this->logger->info("Create new Post");
         // Redirect to the new single post page
         return $response->withRedirect('/detail/'.$newPost['slug'], 301);
@@ -112,14 +93,15 @@ class PostController
     public function editPost($request, $response, $args) {
         //Get the data from the form
         $data = $request->getParsedBody();
+        //Check if title and entry are not empty
         if (empty($data['title']) || empty($data['entry'])) {
-            //Check if title and entry are not empty
             $this->flash->addMessage('NoEdit', 'Title and Entry in the post cannot be empty');
             return $response->withRedirect("/edit/".$data['slug'], 301);
         }
-        //Add the edit date of the post
+        //Add the edit date of the post and create slug
         $data['update_date'] = date("Y-m-d H:i");
         $slug = $this->slugify->slugify($data['title']);
+        //Check if the new slug is already in the db
         if ($this->isSlugInPosts($slug)) {
             $data['slug'] = $slug . "-" . ($this->postModel->getIdLastPost() + 1);
         } else {
@@ -128,18 +110,18 @@ class PostController
         //Update post data and relative tags name
         $this->postModel->updatePost($data);
         $this->tagModel->addTags($data['tags'], $data['id']);
-        // Sample log message
+        // Log message
         $this->logger->info("Update Post");
         // Redirect to the updated single post page
         return $response->withRedirect("/detail/".$data['slug'], 301);
     }
 
     public function deletePost($request, $response, $args) {
-        //Get id of the post to delete and delete it
+        //Get id of the post to delete and delete it and the associated comments
         $id = $request->getParsedBody()['id'];
         $this->postModel->deletePost($id);
         $this->commentModel->deleteComments($id);
-        // Sample log message
+        // Log message
         $this->logger->info("Delete Post");
         //Redirect to the index page
         return $response->withRedirect('/', 301);
@@ -147,6 +129,7 @@ class PostController
 
     private function isSlugInPosts($slug)
     {
+        //Check if the new slug is already in the db
         $posts = $this->postModel->getPosts();
         foreach ($posts as $post) {
             if ($post['slug'] == $slug) {
@@ -154,5 +137,25 @@ class PostController
             }
         }
         return false;
+    }
+
+    protected function pagination($request)
+    {
+        /** code adapted from https://github.com/romanzipp/PHP-Slim-Pagination **/
+        //Set parameters for pagination
+        $page = $request->getParam('page', 0) > 0 ? $request->getParam('page') : 1;
+        $skip = ($page - 1) * $this->limit;
+        $count = $this->postModel->countPosts();
+        //Return parameters for pagination 
+        return [
+            'posts' => $this->postModel->getPosts($this->limit, $skip),
+            'pagination' => [
+                'needed' => $count > $this->limit,
+                'count' => $count,
+                'page' => $page,
+                'lastpage' => (ceil($count / $this->limit) == 0 ? 1 : ceil($count / $this->limit)),
+                'limit' => $this->limit
+            ]
+        ];
     }
 }

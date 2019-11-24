@@ -16,7 +16,7 @@ class CommentController
     public function newComment($request, $response, $args) {
         //Get all the data from the form
         $data = $request->getParsedBody();
-        //Check if title and entry are not empty
+        //Check if title and comment are not empty
         if (empty($data['name']) || empty($data['body'])) {
             $this->flash->addMessage('NoComment', 'Name and Comment in comments cannot be empty');
             return $response->withRedirect('/detail/'.$data['slug'], 301);
@@ -25,7 +25,7 @@ class CommentController
         $data['date'] = date("Y-m-d H:i");
         //Create comment
         $this->commentModel->createComment($data);
-        // Sample log message
+        // Log message
         $this->logger->info("Create new Comment");
         // Render index view
         return $response->withRedirect('/detail/'.$data['slug'], 301);
@@ -36,7 +36,7 @@ class CommentController
         $data = $request->getParsedBody();
         //Delete the comment
         $this->commentModel->deleteComment($data['comment_id']);
-        // Sample log message
+        // Log message
         $this->logger->info("Delete Comment");
         // Render index view
         return $response->withRedirect('/detail/'.$data['slug'], 301);

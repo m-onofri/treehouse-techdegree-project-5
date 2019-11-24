@@ -9,7 +9,7 @@
             </time>
             <p class="excerpt">{{ post.body[0:200] }}
             <a href="/detail/{{ post.slug }}">[Read more...]</a></p>
-            <!-- Display all the tags for te current entry -->
+            <!-- Display all the tags for the current entry -->
             {% if post.tags is not empty %}
                 <div class='tags-list'>
                 {% for tag in post.tags %}
@@ -19,6 +19,7 @@
             {% endif %}
         </article>
     {% endfor %}
+    <!-- code adapted from https://github.com/romanzipp/PHP-Slim-Pagination -->
     {% if pagination.needed %}
         <div class="pagination">
             {% for i in 1..pagination.lastpage %}

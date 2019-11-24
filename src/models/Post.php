@@ -22,7 +22,7 @@ class Post
         return $postNumber;
     }
     /**Return all the available posts
-     * 2 required arguments: $limit (integer), $skip (integer)*/
+     * 2 optional arguments: $limit (integer), $skip (integer)*/
     public function getPosts($limit=null, $skip=0)
     {
         try {
@@ -43,8 +43,7 @@ class Post
         
         return $this->implementTags($posts);
     }
-    /**Return all the available posts
-     * 2 required arguments: $limit (integer), $skip (integer)*/
+    //Return the id of the last post in the posts table
     public function getIdLastPost()
     {
         try {
@@ -86,7 +85,7 @@ class Post
         return $this->implementTags($entries);
     }
     /**Return a specific post
-     * 1 required argument: $post_id (integer)*/
+     * 2 optional arguments: $slug (integer) and $i*/
     public function getPost($slug=null, $id=null)
     {
         try {

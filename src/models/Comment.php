@@ -65,7 +65,6 @@ class Comment
     public function deleteComment($comment_id)
     {
         try {
-            //$this->getComment($comment_id);
             $statement = $this->database->prepare('DELETE FROM comments WHERE id=:id');
             $statement->bindParam('id', $comment_id);
             if ($statement->execute()) {
@@ -78,9 +77,9 @@ class Comment
         
         return false;
     }
-    /**Delete a specific comment
-     * 1 required argument: $comment_id (integer)
-     * Return true if the comment was created, otherwise false*/
+    /**Delete all the comments associated to specific post
+     * 1 required argument: $post_id (integer)
+     * Return true if the comments were deleted, otherwise false*/
     public function deleteComments($post_id)
     {
         try {

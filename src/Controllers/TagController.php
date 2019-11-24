@@ -16,6 +16,7 @@ class TagController
 
     protected function pagination($request, $tag_id)
     {
+        /** code adapted from https://github.com/romanzipp/PHP-Slim-Pagination **/
         //Set parameters for pagination
         $page = $request->getParam('page', 0) > 0 ? $request->getParam('page') : 1;
         $skip = ($page - 1) * $this->limit;
@@ -34,7 +35,7 @@ class TagController
     }
 
     public function tagsList($request, $response, $args) {
-      //Get all the tag available
+      //Get all the tags available
         $tagsList = $this->tagModel->getTags();
         $tag_id = $request->getParam('tag');
         if (empty($tag_id)) {
@@ -65,8 +66,9 @@ class TagController
         switch ($data['action']) {
             //if the user clicked the 'List Post' button
             case 'List Entries':
-                //Get all the tag available
+                //Get all the tags available
                 $tagsList = $this->tagModel->getTags();
+                //Render all the posts with the selected tag
                 return $this->view->render($response, 'tags.twig', array_merge([
                         'tagsList' => $tagsList,
                         'tagName' => $tagName,
