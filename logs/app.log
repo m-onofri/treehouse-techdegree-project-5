@@ -1,1 +1,8 @@
 
+[2019-11-24 10:20:31] slim-app.INFO: Create new Post [] {"uid":"1e2de38"}
+[2019-11-24 10:20:42] slim-app.INFO: Create new Comment [] {"uid":"6246334"}
+[2019-11-24 10:21:17] slim-app.INFO: Create new Comment [] {"uid":"92384f7"}
+[2019-11-24 10:21:38] slim-app.INFO: Delete Comment [] {"uid":"69c4867"}
+[2019-11-24 10:25:15] slim-app.INFO: Update Post [] {"uid":"e921a4b"}
+[2019-11-24 10:25:30] slim-app.INFO: Update Post [] {"uid":"b64fa6e"}
+[2019-11-24 10:25:37] slim-app.INFO: Delete Post [] {"uid":"ab206b5"}

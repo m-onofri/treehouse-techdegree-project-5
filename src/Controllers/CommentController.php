@@ -18,7 +18,7 @@ class CommentController
         $data = $request->getParsedBody();
         //Check if title and entry are not empty
         if (empty($data['name']) || empty($data['body'])) {
-            $this->flash->addMessage('NoComment', 'Name and Body in comments cannot be empty');
+            $this->flash->addMessage('NoComment', 'Name and Comment in comments cannot be empty');
             return $response->withRedirect('/detail/'.$data['slug'], 301);
         }
         //Set the data when comment is created

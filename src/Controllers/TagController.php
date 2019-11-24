@@ -22,7 +22,7 @@ class TagController
         $count = count($this->postModel->getPostsPerTag($tag_id));
         //Return parameters for pagination 
         return [
-        'posts' => $$this->postModel->getPostsPerTag($tag_id, $this->limit, $skip), 
+        'posts' => $this->postModel->getPostsPerTag($tag_id, $this->limit, $skip), 
         'pagination' => [
                 'needed' => $count > $this->limit,
                 'count' => $count,
@@ -80,7 +80,7 @@ class TagController
             //if the user clicked the 'Delete' button
             case 'Delete':
                 //Delete the selected tag
-                $tagModel->deleteTag($tag_id);
+                $this->tagModel->deleteTag($tag_id);
             default:
                 //Redirect to the tag starting page
                 return $response->withRedirect('/tag', 301);
