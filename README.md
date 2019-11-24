@@ -34,7 +34,7 @@ In your browser, go to http://localhost:4000/ and see the blog.
 
 * Add ability to categorize with tags: a blog entry can exist with no tags, or have multiple tags.
 * Add a tags page that allows to edit and delete tags, and lists all the posts with a specific tag.
-* Add the ability to delete a blog entry.
+* Add the ability to delete a blog entry and the associated comments.
 * Route blog entries to search engine friendly post slugs (instead of ID).
 * Display alert messages when specific form fields are empty.
 * Add pagination.
