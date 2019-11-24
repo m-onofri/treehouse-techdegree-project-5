@@ -52,8 +52,8 @@ In your browser, go to http://localhost:4000/ and see the blog.
 
 ## Notes
 
-* Pagination: ...
-* Slug: ...
+* **Pagination**: for the pagination I adapted to my project the code from [**PHP Slim Pagination**](https://github.com/romanzipp/PHP-Slim-Pagination)
+* **Slug**: to generate slugs I installed the package [**cocur/slugify**](https://github.com/cocur/slugify)
 
 ## Cross-browser consistency
 
