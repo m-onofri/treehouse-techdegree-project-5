@@ -41,7 +41,7 @@
                             <div class="comment-info">
                                 <strong>{{ comment.name }}</strong>
                                 <time datetime="{{ comment.date }}">
-                                    {{ post.date|date("F j, Y \\a\\t H:i") }}
+                                    {{ comment.date|date("F j, Y \\a\\t H:i") }}
                                 </time>
                             </div>
                             <form action="/comment/delete" method="POST"
@@ -62,7 +62,6 @@
             {% endif %}
             
             <div class="new-comment">
-            <p>{{msg}}</p>
                 <form method="POST" action="/comment/new" class="comment-form">
                     <label for="name"> Name</label>
                     <input type="text" name="name"><br>
