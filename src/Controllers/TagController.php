@@ -6,11 +6,31 @@ class TagController
     protected $postModel;
     protected $tagModel;
     protected $view;
+    protected $limit = 5;
 
     public function __construct($container) {
         $this->postModel = $container->get('post');
         $this->tagModel = $container->get('tag');
         $this->view = $container->get('view');
+    }
+
+    protected function pagination($request, $tag_id)
+    {
+        //Set parameters for pagination
+        $page = $request->getParam('page', 0) > 0 ? $request->getParam('page') : 1;
+        $skip = ($page - 1) * $this->limit;
+        $count = count($this->postModel->getPostsPerTag($tag_id));
+        //Return parameters for pagination 
+        return [
+        'posts' => $$this->postModel->getPostsPerTag($tag_id, $this->limit, $skip), 
+        'pagination' => [
+                'needed' => $count > $this->limit,
+                'count' => $count,
+                'page' => $page,
+                'lastpage' => (ceil($count / $this->limit) == 0 ? 1 : ceil($count / $this->limit)),
+                'limit' => $this->limit
+            ]
+        ];
     }
 
     public function tagsList($request, $response, $args) {
@@ -23,27 +43,13 @@ class TagController
         }
         //Get name of the selected tag
         $tagName = $this->tagModel->getTag($tag_id)['name'];
-        //Set parameters for pagination
-        $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
-        $limit = 5; // Number of posts on one page
-        $skip = ($page - 1) * $limit;
-        $count = count($this->postModel->getPostsPerTag($tag_id));
-        //Get all the posts with the selected tag
-        $postsList = $this->postModel->getPostsPerTag($tag_id, $limit, $skip);
         //Render the list of the posts with the selected tag
-        return $this->view->render($response, 'tags.twig', [
-            'tagsList' => $tagsList,
-            'posts' => $postsList,
-            'tagName' => $tagName,
-            'tagId' => $tag_id,
-            'pagination' => [
-                'needed' => $count > $limit,
-                'count' => $count,
-                'page' => $page,
-                'lastpage' => (ceil($count / $limit) == 0 ? 1 : ceil($count / $limit)),
-                'limit' => $limit
-            ]
-        ]);
+        return $this->view->render($response, 'tags.twig', array_merge([
+                'tagsList' => $tagsList,
+                'tagName' => $tagName,
+                'tagId' => $tag_id
+            ], $this->pagination($request, $tag_id)
+        ));
     }
 
     public function handleTag($request, $response, $args) {
@@ -61,27 +67,12 @@ class TagController
             case 'List Entries':
                 //Get all the tag available
                 $tagsList = $this->tagModel->getTags();
-                //Set parameters for pagination
-                $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
-                $limit = 5; // Number of posts on one page
-                $skip = ($page - 1) * $limit;
-                $count = count($this->postModel->getPostsPerTag($tag_id));
-                //Get all the posts with the selected tag
-                $postsList = $this->postModel->getPostsPerTag($tag_id, $limit, $skip);
-                //Render the list of the posts with the selected tag
-                return $this->view->render($response, 'tags.twig', [
-                    'tagsList' => $tagsList,
-                    'posts' => $postsList,
-                    'tagName' => $tagName,
-                    'tagId' => $tag_id,
-                    'pagination' => [
-                        'needed' => $count > $limit,
-                        'count' => $count,
-                        'page' => $page,
-                        'lastpage' => (ceil($count / $limit) == 0 ? 1 : ceil($count / $limit)),
-                        'limit' => $limit
-                    ]
-                ]);
+                return $this->view->render($response, 'tags.twig', array_merge([
+                        'tagsList' => $tagsList,
+                        'tagName' => $tagName,
+                        'tagId' => $tag_id
+                    ],$this->pagination($request, $tag_id)
+                ));
             //if the user clicked the 'Update' button
             case 'Update':
                 //Render the tag update page

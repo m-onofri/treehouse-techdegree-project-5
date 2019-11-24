@@ -10,6 +10,7 @@ class PostController
     protected $flash;
     protected $logger;
     protected $slugify;
+    protected $limit = 5;
 
     public function __construct($container) {
         $this->postModel = $container->get('post');
@@ -21,27 +22,29 @@ class PostController
         $this->slugify = $container->get('slugify');
     }
 
-    public function home($request, $response, $args) {
-        //Set parameters for pagination
-        $page = ($request->getParam('page', 0) > 0) ? $request->getParam('page') : 1;
-        $limit = 5; // Number of posts on one page
-        $skip = ($page - 1) * $limit;
-        $count = $this->postModel->countPosts(); // Count of all available posts
-
-        //Get all the available posts
-        $posts = $this->postModel->getPosts($limit, $skip);
-
+    public function home($request, $response, $args) 
+    { 
         // Render index page
-        return $this->view->render($response, 'index.twig', [
-            'posts' => $posts,
+        return $this->view->render($response, 'index.twig', $this->pagination($request));
+    }
+
+    protected function pagination($request)
+    {
+        //Set parameters for pagination
+        $page = $request->getParam('page', 0) > 0 ? $request->getParam('page') : 1;
+        $skip = ($page - 1) * $this->limit;
+        $count = $this->postModel->countPosts();
+        //Return parameters for pagination 
+        return [
+            'posts' => $this->postModel->getPosts($this->limit, $skip),
             'pagination' => [
-                'needed' => $count > $limit,
+                'needed' => $count > $this->limit,
                 'count' => $count,
                 'page' => $page,
-                'lastpage' => (ceil($count / $limit) == 0 ? 1 : ceil($count / $limit)),
-                'limit' => $limit
+                'lastpage' => (ceil($count / $this->limit) == 0 ? 1 : ceil($count / $this->limit)),
+                'limit' => $this->limit
             ]
-        ]);
+        ];
     }
 
     public function singlePost($request, $response, $args) {
